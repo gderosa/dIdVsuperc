@@ -47,7 +47,7 @@
 #define   MaxExpPoints              4096
 
 #define   SquaredResidualsPlotFile  PLOTDIR"/squared_residuals.plt"
-#define   dIdVPlotFile              PLOTDIR"/dIdV.plt"
+#define   dIdVPlotFile              PLOTDIR"/dIdV-theor.plt"
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 
