@@ -26,6 +26,8 @@ init(void)
     Gamma0      = Gamma0_default;
     Delta0      = Delta0_default;
     k_B         = k_B_default;
+    Vi		= Vi_default;
+    Vf		= Vf_default;
     strcpy(ExpDataFile, ExpDataFile_default);
     PlotSquareResiduals = PlotSquareResiduals_default;
     

@@ -21,7 +21,7 @@
 
 #include "common.h"
 
-double Gamma0, Delta0, T0, k_B;
+double Gamma0, Delta0, T0, k_B, Vi, Vf;
 char ExpDataFile[BUFSIZ];
 short int PlotSquareResiduals;
 

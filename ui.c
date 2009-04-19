@@ -28,21 +28,29 @@ ui(void)
     line = (char *) malloc(BUFSIZ*sizeof(char));
     str  = (char *) malloc(BUFSIZ*sizeof(char));
     
-    printf("Initial value for Gamma [%g] ", Gamma0);
+    printf("Initial value for Gamma                     [%g] ", Gamma0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Gamma0);
     
-    printf("Initial value for Delta [%g] ", Delta0);
+    printf("Initial value for Delta                     [%g] ", Delta0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Delta0);
     
-    printf("Absolute temperature    [%g] ", T0);
+    printf("Absolute temperature                        [%g] ", T0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &T0);
     
-    printf("Experimental data file  [%s] ", ExpDataFile);
+    printf("Experimental data file                      [%s] ", ExpDataFile);
     fgets(line, n, stdin);
     sscanf(line, "%s", ExpDataFile);
+
+    printf("Fit interval: bias voltage lower limit(mV)  [unlimited] ");
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Vi);
+
+    printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Vf);
 
     printf(
            "Plot squared residuals (it may take a long time)?  [%s] ", 

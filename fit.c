@@ -49,8 +49,9 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
   
   for (i = 0; i < n; i++)
     {
-      /* example fitting an interval only (right peak) */
-      /* if (X[i]<3.6 || X[i]>6.4) continue; */
+      /* fitting an interval only */ 
+        /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
+      if (X[i]<Vi || X[i]>Vf) continue; 
       
       theory = Gin(X[i], Gamma, Delta, T0);
       experiment = Y[i];

@@ -41,6 +41,8 @@
 #define   Delta0_default            2.5
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/sample.dat" 
+#define   Vi_default                -HUGE_VAL
+#define   Vf_default                HUGE_VAL
 
 #define   MaxExpPoints              4096
 
@@ -90,7 +92,7 @@ struct data { /* experimental points */
 
 /* Globals */
 #ifndef GLOBALS
-extern double Gamma0, Delta0, T0, k_B;
+extern double Gamma0, Delta0, T0, k_B, Vi, Vf;
 extern char ExpDataFile[BUFSIZ];
 extern BOOL PlotSquareResiduals;
 #endif
