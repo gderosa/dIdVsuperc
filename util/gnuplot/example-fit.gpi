@@ -1,6 +1,6 @@
 #!/usr/bin/gnuplot
 
-name="MgB2_03"
+#name="MgB2_01"
 
 pngfont="/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
@@ -20,9 +20,9 @@ set xlabel "bias voltage (mV)"
 set ylabel "dI/dV (normalized)" 
 
 
-set terminal png size 2970,2100 font pngfont 40 
+set terminal png size 2970,2100 font pngfont 40
 set output name.".big.png"
-plot datafile w err title datafile, fitfile w lines linewidth 3 title fitfile
+plot datafile w err title datafile, fitfile w lines linewidth 4 title fitfile
 
 set terminal postscript size 29.7cm,21.0cm color solid landscape font 16
 set output name.".ps"
