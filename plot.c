@@ -25,12 +25,15 @@ plot(const double Gamma, const double Delta, struct data * d)
   double V;
   double Gamma_var, Delta_var;
   FILE * file;
+  char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
   gsl_vector * params = gsl_vector_alloc(2);  
   unsigned int i = 0;
   
   printf("Saving data for plotting (dI/dV)... ");
-  
-  file = fopen(dIdVPlotFile, "w");
+
+  strcpy(fit_filename, ExpDataFile);
+  strcat(fit_filename, ".fit");
+  file = fopen(fit_filename, "w");
   
   for (V=-35.;V<35.;V+=0.05) 
     {
