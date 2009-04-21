@@ -41,7 +41,7 @@ plot(const double Gamma, const double Delta, struct data * d)
   /* Plot theor. function "slightly larger" than experimental points */
   V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;
   V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio; 
-  for (V=V_plot_i; V<V_plot_f; V+=0.05) 
+  for (V=V_plot_i; V<V_plot_f; V+=0.03534234) /* "random" step... */  
     {
       fprintf(file, "%.8f \t %.8f \n", V, Gin(V, Gamma, Delta, T0));       
     }  
