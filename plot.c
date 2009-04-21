@@ -23,14 +23,12 @@ int
 plot(const double Gamma, const double Delta, struct data * d)
 {
   double V, V_plot_i, V_plot_f;
-  double V_exp_min = min(d->X,d->n); 
-  double V_exp_max = max(d->X,d->n);
+  double V_exp_min = array_min(d->X,d->n); 
+  double V_exp_max = array_max(d->X,d->n);
   double exp_data_xrange = V_exp_max - V_exp_min ;
-  double Gamma_var, Delta_var;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
   gsl_vector * params = gsl_vector_alloc(2);  
-  unsigned int i = 0;
   
   strcpy(fit_filename, ExpDataFile);
   strcat(fit_filename, ".fit");
@@ -50,38 +48,8 @@ plot(const double Gamma, const double Delta, struct data * d)
   
   printf("done.\n");
   
-  if (PlotSquareResiduals)    
-    {
-      file = fopen(SquaredResidualsPlotFile, "w");
-  
-      for (Gamma_var=0; Gamma_var<2*Gamma; Gamma_var += 2*(Gamma/PLOTSTEPS))
-        {
-          for (Delta_var=0; Delta_var<2*Delta; Delta_var += 2*(Delta/PLOTSTEPS))
-            {
-              i++;
-              printf(
-                     "Saving data for plotting (chi^2(Delta, Gamma))... %03.1f%%\r",
-                     (100.0*((double)i))/(double)(PLOTSTEPS*PLOTSTEPS)
-                     );
-              
-              gsl_vector_set(params, 0, Gamma_var);
-              gsl_vector_set(params, 1, Delta_var);          
-              fprintf(
-                      file, 
-                      "%.8f \t %.8f \t %.8f \n", 
-                      Gamma_var, 
-                      Delta_var, 
-                      squared_residuals (params, d)                  
-                      );
-            }
-          fprintf(file, "\n");
-        }
-      
-      fclose(file);
-    }
-  
-  
   gsl_vector_free(params);
   
   return 0;
 }
+

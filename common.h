@@ -46,7 +46,6 @@
 #define   MaxExpPoints              4096
 
 #define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
-#define   SquaredResidualsPlotFile  DATADIR"/squared_residuals.plt"
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 
@@ -55,11 +54,6 @@
 
 /* for num. differentiation */
 #define   DSTEPSIZE                 2e-7  
-
-/* to see (through a plot) how the sum of the squared residuals changes with 
- * parameters; i.e.: a rectangle is defined in the (Gamma, Delta) plane */
-#define PLOTSTEPS 60
-#define PlotSquareResiduals_default 0
 
 /* Types */
 
@@ -104,9 +98,9 @@ cpow_2(const gsl_complex z);
 
 /* Minimum and maximum element of an array -- TODO: use gsl_vector instead */
 double
-min(double *ary, size_t n);
+array_min(double *ary, size_t n);
 double
-max(double *ary, size_t n);
+array_max(double *ary, size_t n);
 
 /* density of states */
 double 
@@ -186,7 +180,6 @@ BOOL2yn(BOOL b);
 
 BOOL
 yn2BOOL(char * str);
-
 
 
 

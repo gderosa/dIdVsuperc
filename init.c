@@ -29,7 +29,6 @@ init(void)
     Vi		= Vi_default;
     Vf		= Vf_default;
     strcpy(ExpDataFile, ExpDataFile_default);
-    PlotSquareResiduals = PlotSquareResiduals_default;
     
     return 0;
   }

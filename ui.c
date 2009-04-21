@@ -52,30 +52,17 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Vf);
 
-    printf(
-           "Plot squared residuals (it may take a long time)?  [%s] ", 
-           BOOL2yn(PlotSquareResiduals)
-          );
-    fgets(line, n, stdin);
-    sscanf(line, "%s", str);
-    PlotSquareResiduals = yn2BOOL(str);
-    
-    return 0;
+    /* 3D plotting of chi squared currently disabled */
+
+    /* printf(
+     *        "Plot squared residuals (it may take a long time)?  [%s] ", 
+     *        BOOL2yn(PlotSquareResiduals)
+     *       );
+     * fgets(line, n, stdin);
+     * sscanf(line, "%s", str);
+     * PlotSquareResiduals = yn2BOOL(str);
+     */
+
+     return 0;
   }
 
-const char * 
-BOOL2yn(BOOL b) 
-{
-  if (b) 
-    return "Y/n";
-  else
-    return "y/N";
-}
-
-BOOL
-yn2BOOL(char * str)
-{
-  if (str[0] == 'y' || str[0] == 'y')
-    return 1;
-  return 0;
-}

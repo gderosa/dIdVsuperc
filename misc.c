@@ -29,7 +29,7 @@ cpow_2(const gsl_complex z)
 
 /* Minimum and maximum element of an array -- TODO: use gsl_vector instead */
 
-double min(double *ary, size_t n) 
+double array_min(double *ary, size_t n) 
 {
   double min = HUGE_VAL;
   size_t i;
@@ -43,7 +43,7 @@ double min(double *ary, size_t n)
   return min;
 }
 
-double max(double *ary, size_t n) 
+double array_max(double *ary, size_t n) 
 {
   double max = -HUGE_VAL;
   size_t i;
@@ -57,4 +57,21 @@ double max(double *ary, size_t n)
   return max;
 }
 
+/* User Interface */
 
+const char * 
+BOOL2yn(BOOL b) 
+{
+  if (b) 
+    return "Y/n";
+  else
+    return "y/N";
+}
+
+BOOL
+yn2BOOL(char * str)
+{
+  if (str[0] == 'y' || str[0] == 'y')
+    return 1;
+  return 0;
+}
