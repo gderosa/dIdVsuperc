@@ -13,8 +13,10 @@ print GNUPLOT "cwd=\"".dirname($0)."\"\n";
 while($f=readdir DATADIR) {
     if ($f =~ m/\.dat$/) {
         $f =~ s/(.*)\.dat$/$1/; 
+        print "Plotting \"$f\"... ";
         print GNUPLOT "name=\"$f\"\n";
         print GNUPLOT "load \"".dirname($0)."/plot.gpi\"\n";
+        print "done.\n";
     }
 }
 
