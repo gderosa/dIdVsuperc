@@ -5,7 +5,7 @@
 pngfont="/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
 
-datadir="../../data"
+datadir=cwd."/../../data"
 dataext=".dat"
 fitext=".fit"
 datafile=datadir."/".name.dataext
@@ -21,15 +21,15 @@ set ylabel "dI/dV (normalized)"
 
 
 set terminal png size 2970,2100 font pngfont 40
-set output name.".big.png"
+set output cwd."/".name.".big.png"
 plot datafile w err title datafile, fitfile w lines linewidth 4 title fitfile
 
 set terminal postscript size 25.000cm,17.678cm color solid landscape font 15
-set output name.".ps"
+set output cwd."/".name.".ps"
 plot datafile linewidth 0.1 w err title datafile, fitfile w lines linewidth 2.4 title fitfile
 
 set terminal postscript size 25.000cm,17.678cm color solid eps font 26
-set output name.".eps"
+set output cwd."/".name.".eps"
 plot datafile linewidth 0.1 w err title datafile, fitfile w lines linewidth 4.4 title fitfile
 
 
