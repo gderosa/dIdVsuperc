@@ -19,11 +19,42 @@
 
 #include "common.h"
  
-
-/* Library */
+/* Complex functions */
+        
 gsl_complex
 cpow_2(const gsl_complex z)
 {
   return gsl_complex_mul(z, z);
 }
+
+/* Minimum and maximum element of an array -- TODO: use gsl_vector instead */
+
+double min(double *ary, size_t n) 
+{
+  double min = HUGE_VAL;
+  size_t i;
+
+  for (i=0;i<n;i++)
+    {
+      if (ary[i] < min) 
+        min = ary[i];
+    }
+
+  return min;
+}
+
+double max(double *ary, size_t n) 
+{
+  double max = -HUGE_VAL;
+  size_t i;
+
+  for (i=0;i<n;i++)
+    {
+      if (ary[i] > max) 
+        max = ary[i];
+    }
+
+  return max;
+}
+
 

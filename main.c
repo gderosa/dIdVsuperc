@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
+/* TODO: use gsl_vector instead of arrays */
 
 #include "common.h"
 
@@ -42,7 +42,7 @@ main (void)
   
   init();
   
-  printf("\nCopyright (C) 2008, Guido De Rosa <guidoderosa@gmail.com>\n"
+  printf("\nCopyright (C) 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>\n"
          "Based on GNU Scientific Library http://www.gnu.org/software/gsl/ \n"
          "License: GPLv3\n\n"
          );  
@@ -53,7 +53,7 @@ main (void)
   
   if(!f) 
   	{
-      fprintf(stderr,"Couldn't open file!\n");
+      fprintf(stderr,"Couldn't open %s!\n", ExpDataFile);
       return 127;
     }  
   while (fgets(line, sizeof line, f)) 
@@ -64,7 +64,7 @@ main (void)
       i++;
     }          
   ExpPoints = i;    
-  
+
   d.n       = ExpPoints;
   d.X       = ExpDataX;
   d.Y       = ExpDataY;

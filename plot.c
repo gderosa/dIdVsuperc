@@ -23,21 +23,24 @@ int
 plot(const double Gamma, const double Delta, struct data * d)
 {
   double V, V_plot_i, V_plot_f;
-  double exp_data_xrange = d->X[(d->n) - 1] - d->X[0] ;
+  double V_exp_min = min(d->X,d->n); 
+  double V_exp_max = max(d->X,d->n);
+  double exp_data_xrange = V_exp_max - V_exp_min ;
   double Gamma_var, Delta_var;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
   gsl_vector * params = gsl_vector_alloc(2);  
   unsigned int i = 0;
   
-  printf("Saving data for plotting (dI/dV)... ");
-
   strcpy(fit_filename, ExpDataFile);
   strcat(fit_filename, ".fit");
   file = fopen(fit_filename, "w");
 
-  V_plot_i = d->X[0] - exp_data_xrange*ExtraPlotRatio;
-  V_plot_f = d->X[(d->n) - 1] + exp_data_xrange*ExtraPlotRatio; 
+  printf("Saving data for plotting (dI/dV) in %s ... ", fit_filename);
+
+  /* Plot theor. function "slightly larger" than experimental points */
+  V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;
+  V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio; 
   for (V=V_plot_i; V<V_plot_f; V+=0.05) 
     {
       fprintf(file, "%.8f \t %.8f \n", V, Gin(V, Gamma, Delta, T0));       

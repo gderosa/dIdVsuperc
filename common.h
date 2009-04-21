@@ -96,12 +96,17 @@ extern char ExpDataFile[BUFSIZ];
 extern BOOL PlotSquareResiduals;
 #endif
 
+/* Functions */
 
-/*Library*/
+/* square of a complex number */
 gsl_complex
 cpow_2(const gsl_complex z);
 
-/* Functions */
+/* Minimum and maximum element of an array -- TODO: use gsl_vector instead */
+double
+min(double *ary, size_t n);
+double
+max(double *ary, size_t n);
 
 /* density of states */
 double 
