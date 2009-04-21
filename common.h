@@ -35,7 +35,6 @@
 
 /* Constants and defaults */
 #define   DATADIR                   "data"
-#define   PLOTDIR                   "plots"
 #define   T0_default                4.2             /* Kelvin degrees */
 #define   Gamma0_default            0.7
 #define   Delta0_default            2.5
@@ -46,8 +45,8 @@
 
 #define   MaxExpPoints              4096
 
-#define   TheorExpPlotRatio         1.05
-#define   SquaredResidualsPlotFile  PLOTDIR"/squared_residuals.plt"
+#define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
+#define   SquaredResidualsPlotFile  DATADIR"/squared_residuals.plt"
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 

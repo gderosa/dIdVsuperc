@@ -22,7 +22,8 @@
 int 
 plot(const double Gamma, const double Delta, struct data * d)
 {
-  double V;
+  double V, V_plot_i, V_plot_f;
+  double exp_data_xrange = d->X[(d->n) - 1] - d->X[0] ;
   double Gamma_var, Delta_var;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
@@ -34,8 +35,10 @@ plot(const double Gamma, const double Delta, struct data * d)
   strcpy(fit_filename, ExpDataFile);
   strcat(fit_filename, ".fit");
   file = fopen(fit_filename, "w");
-  
-  for (V=-35.;V<35.;V+=0.05) 
+
+  V_plot_i = d->X[0] - exp_data_xrange*ExtraPlotRatio;
+  V_plot_f = d->X[(d->n) - 1] + exp_data_xrange*ExtraPlotRatio; 
+  for (V=V_plot_i; V<V_plot_f; V+=0.05) 
     {
       fprintf(file, "%.8f \t %.8f \n", V, Gin(V, Gamma, Delta, T0));       
     }  
