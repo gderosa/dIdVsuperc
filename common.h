@@ -49,7 +49,8 @@
 #define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
 
 /* 3D plotting of chi^2 as a function of Gamma and Delta */
-#define   SPLOTSTEPS                43
+#define   SPLOTSTEPS                70
+#define   SPLOTSIGMAS               10
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 

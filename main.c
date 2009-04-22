@@ -94,7 +94,7 @@ main (void)
   if (PlotSquareResiduals) 
     {
       printf("\n");
-      splot(Gamma_best_final, Delta_best_final, 3.0*sigma_Gamma, 3.0*sigma_Delta, &d);
+      splot(Gamma_best_final, Delta_best_final, SPLOTSIGMAS*sigma_Gamma, SPLOTSIGMAS*sigma_Delta, &d);
     }
 
   gsl_matrix_free(cov_Gamma_Delta);
