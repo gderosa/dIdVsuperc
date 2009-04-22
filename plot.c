@@ -28,13 +28,12 @@ plot(const double Gamma, const double Delta, struct data * d)
   double exp_data_xrange = V_exp_max - V_exp_min ;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
-  gsl_vector * params = gsl_vector_alloc(2);  
   
   strcpy(fit_filename, ExpDataFile);
   strcat(fit_filename, ".fit");
   file = fopen(fit_filename, "w");
 
-  printf("Saving data for plotting (dI/dV) in %s ... ", fit_filename);
+  printf("Saving data for plotting (dI/dV)\n  in %s ... ", fit_filename);
 
   /* Plot theor. function "slightly larger" than experimental points */
   V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;
@@ -47,8 +46,6 @@ plot(const double Gamma, const double Delta, struct data * d)
   fclose(file);
   
   printf("done.\n");
-  
-  gsl_vector_free(params);
   
   return 0;
 }

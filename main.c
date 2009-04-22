@@ -17,8 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/* TODO: use gsl_vector instead of arrays */
-
 #include "common.h"
 
 int 
@@ -31,7 +29,9 @@ main (void)
   
   double Gamma_best_step1, Delta_best_step1;
   double Gamma_best_step2, Delta_best_step2;
-  gsl_matrix cov_Gamma_Delta;
+  double sigma_Gamma, sigma_Delta;
+  double reduced_chi_square;
+  gsl_matrix * cov_Gamma_Delta = gsl_matrix_alloc(2,2);
   
   struct data d;
   
@@ -39,7 +39,7 @@ main (void)
   char line[BUFSIZ];
     
   FILE * f;
-  
+
   init();
   
   printf("\nCopyright (C) 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>\n"
@@ -77,13 +77,27 @@ main (void)
   printf("\n PASS 2: (possibly) refining the fit; computing statistical errors\n" 
          "(Levenberg-Marquardt solver)\n\n");
   
-  fit(&d, Gamma_best_step1, Delta_best_step1, &Gamma_best_step2, &Delta_best_step2, &cov_Gamma_Delta);
-  
+  fit(&d, Gamma_best_step1, Delta_best_step1, &Gamma_best_step2, &Delta_best_step2, cov_Gamma_Delta, &reduced_chi_square);
+
+  sigma_Gamma = 
+	  sqrt(gsl_matrix_get(cov_Gamma_Delta,0,0)) * 
+	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
+  sigma_Delta = 
+	  sqrt(gsl_matrix_get(cov_Gamma_Delta,1,1)) * 
+	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
+
 #define Gamma_best_final Gamma_best_step2  
 #define Delta_best_final Delta_best_step2  
   
   plot(Gamma_best_final, Delta_best_final, &d);
-  
+
+  if (PlotSquareResiduals) 
+    {
+      printf("\n");
+      splot(Gamma_best_final, Delta_best_final, SPLOTSIGMAS*sigma_Gamma, SPLOTSIGMAS*sigma_Delta, &d);
+    }
+
+  gsl_matrix_free(cov_Gamma_Delta);
   return 0;
 }
 

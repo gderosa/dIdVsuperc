@@ -4,7 +4,7 @@ CFLAGS = \
   -Wcast-qual -Wcast-align -Wwrite-strings -fno-common \
   -ansi -pedantic 
 EXE = dIdVsuperc
-OBJECTS = misc.o globals.o init.o ui.o functions.o fit.o plot.o main.o 
+OBJECTS = misc.o globals.o init.o ui.o functions.o fit.o plot.o splot.o main.o 
 LDFLAGS = 
 #LIBS = -lm -lgsl -lcblas -latlas
 LIBS = -lm -lgsl -lgslcblas
