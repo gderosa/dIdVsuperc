@@ -1,4 +1,4 @@
-/* splot.c 3D - plot of chi squared (Gamma, Delta), CURRENTLY UNUSED
+/* splot.c 3D - plot of chi squared (Gamma, Delta) 
  * 
  * Copyright (C) 2008, 2009 Guido De Rosa
  * 
@@ -20,26 +20,30 @@
 #include "common.h"
 
 /* 
- * 3D plot of chi squared (Gamma, Delta), 
- * Status: Draft, CURRENTLY UNUSED
- * TODO: use/improve it? 
+ * 3D plot of [reduced] chi squared (Gamma, Delta), 
  */
 int
 splot(const double Gamma, const double Delta, struct data * d)
 {
-  if (PlotSquareResiduals)    
-    {
-      file = fopen(SquaredResidualsPlotFile, "w");
+      double Gamma_var, Delta_var;
+      char chi_filename[BUFSIZ];
+      FILE * file;
+      size_t i = 0;
+      gsl_vector * params = gsl_vector_alloc(2);
+
+      strcpy(chi_filename, ExpDataFile);
+      strcat(chi_filename, ".chi");
+      file = fopen(chi_filename, "w");
   
-      for (Gamma_var=0; Gamma_var<2*Gamma; Gamma_var += 2*(Gamma/PLOTSTEPS))
+      for (Gamma_var=0; Gamma_var<2*Gamma; Gamma_var += 2*(Gamma/SPLOTSTEPS))
         {
-          for (Delta_var=0; Delta_var<2*Delta; Delta_var += 2*(Delta/PLOTSTEPS))
+          for (Delta_var=0; Delta_var<2*Delta; Delta_var += 2*(Delta/SPLOTSTEPS))
             {
               i++;
               printf(
                      "Saving data for plotting (chi^2(Delta, Gamma))... %03.1f%%\r",
-                     (100.0*((double)i))/(double)(PLOTSTEPS*PLOTSTEPS)
-                     );
+                     (100.0*((double)i))/(double)(SPLOTSTEPS*SPLOTSTEPS)
+                     ); /* progress indicator (percent.) */
               
               gsl_vector_set(params, 0, Gamma_var);
               gsl_vector_set(params, 1, Delta_var);          
@@ -55,5 +59,6 @@ splot(const double Gamma, const double Delta, struct data * d)
         }
       
       fclose(file);
-    }
+      gsl_vector_free(params);
+      return 0;
 }

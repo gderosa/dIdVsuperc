@@ -28,7 +28,6 @@ plot(const double Gamma, const double Delta, struct data * d)
   double exp_data_xrange = V_exp_max - V_exp_min ;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
-  gsl_vector * params = gsl_vector_alloc(2);  
   
   strcpy(fit_filename, ExpDataFile);
   strcat(fit_filename, ".fit");
@@ -47,8 +46,6 @@ plot(const double Gamma, const double Delta, struct data * d)
   fclose(file);
   
   printf("done.\n");
-  
-  gsl_vector_free(params);
   
   return 0;
 }

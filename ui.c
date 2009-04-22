@@ -19,9 +19,13 @@
 
 #include "common.h"
 
+/* just to avoid anooying warnings */
+#ifndef fgets(line, n, stdin)
+#define fgets(line, n, stdin) line=fgets(line, n, stdin)
+ 
 int
 ui(void)
-  {
+{
     char *line, *str;
     size_t n = BUFSIZ;
     
@@ -52,17 +56,19 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Vf);
 
-    /* 3D plotting of chi squared currently disabled */
+    /* 3D plotting of chi squared */
 
-    /* printf(
-     *        "Plot squared residuals (it may take a long time)?  [%s] ", 
-     *        BOOL2yn(PlotSquareResiduals)
-     *       );
-     * fgets(line, n, stdin);
-     * sscanf(line, "%s", str);
-     * PlotSquareResiduals = yn2BOOL(str);
-     */
+    printf(
+          "Plot squared residuals (it may take a long time)?  [%s] ", 
+           BOOL2yn(PlotSquareResiduals)
+          );
+    fgets(line, n, stdin);
+    sscanf(line, "%s", str);
+    PlotSquareResiduals = yn2BOOL(str);
 
-     return 0;
-  }
+    return 0;
+}
+
+#undef fgets(line, n, stdin)
+#endif
 
