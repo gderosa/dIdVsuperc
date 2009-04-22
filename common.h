@@ -49,7 +49,7 @@
 #define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
 
 /* 3D plotting of chi^2 as a function of Gamma and Delta */
-#define   SPLOTSTEPS                40
+#define   SPLOTSTEPS                43
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 
@@ -165,7 +165,8 @@ fit(struct data * d,
     const double Delta_init,    
     double *Gamma, 
     double *Delta, 
-    gsl_matrix * cov);
+    gsl_matrix * cov,
+    double * chisquared);
 
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF);
@@ -180,7 +181,7 @@ int
 plot(const double Gamma, const double Delta, struct data * d);
 
 int
-splot(const double Gamma, const double Delta, struct data * d);
+splot(const double Gamma, const double Delta, const double DGamma, const double DDelta, struct data * d);
 
 const char * 
 BOOL2yn(BOOL b);

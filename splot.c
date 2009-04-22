@@ -23,13 +23,19 @@
  * 3D plot of [reduced] chi squared (Gamma, Delta), 
  */
 int
-splot(const double Gamma, const double Delta, struct data * d)
+splot(const double Gamma, const double Delta, const double DGamma, const double DDelta, struct data * d)
 {
       double Gamma_var, Delta_var;
       char chi_filename[BUFSIZ];
       FILE * file;
-      size_t i = 0;
+      size_t i, j;
       gsl_vector * params = gsl_vector_alloc(2);
+
+      double Gamma_start = Gamma - DGamma;
+      double Gamma_step =  2*DGamma / (SPLOTSTEPS-1);
+
+      double Delta_start = Delta - DDelta;
+      double Delta_step =  2*DDelta / (SPLOTSTEPS-1);
 
       strcpy(chi_filename, ExpDataFile);
       strcat(chi_filename, ".chi");
@@ -37,16 +43,13 @@ splot(const double Gamma, const double Delta, struct data * d)
 
       printf("Saving data for plotting (chi^2(Delta, Gamma))\n");
   
-      for (Gamma_var=0; Gamma_var<2*Gamma; Gamma_var += 2*(Gamma/SPLOTSTEPS))
+      for (i=0; i<SPLOTSTEPS; i++)
         {
-          for (Delta_var=0; Delta_var<2*Delta; Delta_var += 2*(Delta/SPLOTSTEPS))
+          for (j=0; j<SPLOTSTEPS; j++)
             {
-              i++;
-              printf(
-                     "  in %s ... %03.1f%%\r",
-		     chi_filename,
-                     (100.0*((double)i))/(double)(SPLOTSTEPS*SPLOTSTEPS)
-                     ); /* progress indicator (percent.) */
+               
+	      Gamma_var = Gamma_start + i*Gamma_step;
+              Delta_var = Delta_start + j*Delta_step;
               
               gsl_vector_set(params, 0, Gamma_var);
               gsl_vector_set(params, 1, Delta_var);          
@@ -55,11 +58,21 @@ splot(const double Gamma, const double Delta, struct data * d)
                       "%.8f \t %.8f \t %.8f \n", 
                       Gamma_var, 
                       Delta_var, 
-                      squared_residuals (params, d)                  
+                      squared_residuals(params, d) / (d->n - 2) /* chi^2/DoF */
                       );
-            }
+	       
+	      printf(
+                     "  in %s ... %03.1f%%\r",
+		     chi_filename,
+                     (100.0*((double)i))/(double)(SPLOTSTEPS)
+                     ); /* progress indicator (percent.) */
+
+	    }
           fprintf(file, "\n");
         }
+      
+      
+      printf("  in %s ... done.\n", chi_filename);
       
       fclose(file);
       gsl_vector_free(params);

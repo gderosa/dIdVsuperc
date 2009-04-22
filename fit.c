@@ -244,7 +244,8 @@ fit(struct data * d,
     const double Delta_init,
     double *Gamma_best, 
     double *Delta_best, 
-    gsl_matrix *cov)
+    gsl_matrix *cov,
+    double * reduced_chi_square)
 /* strongly based on http://www.gnu.org/software/gsl/manual/html_node/
  * Example-programs-for-Nonlinear-Least_002dSquares-Fitting.html        
  * (main function)
@@ -296,7 +297,7 @@ fit(struct data * d,
   
   gsl_multifit_covar (s->J, 0.0, covar);
   
-  cov = covar;
+  gsl_matrix_memcpy(cov, covar);
   
 #define FIT(i) gsl_vector_get(s->x, i)
 #define ERR(i) sqrt(gsl_matrix_get(covar,i,i))  
@@ -312,7 +313,10 @@ fit(struct data * d,
       
       printf("\n\n  ***** FINAL RESULTS: *****   \n");
       
-      printf("chi^2/DoF = %g\n",  pow(chi, 2.0) / dof);
+
+      *reduced_chi_square = pow(chi, 2.0) / dof;
+
+      printf("chi^2/DoF = %g\n", *reduced_chi_square);
       
       *Gamma_best = FIT(0);
       *Delta_best = FIT(1);
