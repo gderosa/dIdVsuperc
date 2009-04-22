@@ -34,6 +34,8 @@ splot(const double Gamma, const double Delta, struct data * d)
       strcpy(chi_filename, ExpDataFile);
       strcat(chi_filename, ".chi");
       file = fopen(chi_filename, "w");
+
+      printf("Saving data for plotting (chi^2(Delta, Gamma))\n");
   
       for (Gamma_var=0; Gamma_var<2*Gamma; Gamma_var += 2*(Gamma/SPLOTSTEPS))
         {
@@ -41,7 +43,8 @@ splot(const double Gamma, const double Delta, struct data * d)
             {
               i++;
               printf(
-                     "Saving data for plotting (chi^2(Delta, Gamma))... %03.1f%%\r",
+                     "  in %s ... %03.1f%%\r",
+		     chi_filename,
                      (100.0*((double)i))/(double)(SPLOTSTEPS*SPLOTSTEPS)
                      ); /* progress indicator (percent.) */
               

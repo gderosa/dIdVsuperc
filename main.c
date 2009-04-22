@@ -83,7 +83,10 @@ main (void)
 #define Delta_best_final Delta_best_step2  
   
   plot(Gamma_best_final, Delta_best_final, &d);
-  
+
+  if (PlotSquareResiduals) 
+    splot(Gamma_best_final, Delta_best_final, &d);
+
   return 0;
 }
 

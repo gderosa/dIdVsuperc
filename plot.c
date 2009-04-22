@@ -33,7 +33,7 @@ plot(const double Gamma, const double Delta, struct data * d)
   strcat(fit_filename, ".fit");
   file = fopen(fit_filename, "w");
 
-  printf("Saving data for plotting (dI/dV) in %s ... ", fit_filename);
+  printf("Saving data for plotting (dI/dV)\n  in %s ... ", fit_filename);
 
   /* Plot theor. function "slightly larger" than experimental points */
   V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;

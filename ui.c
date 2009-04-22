@@ -20,7 +20,7 @@
 #include "common.h"
 
 /* just to avoid anooying warnings */
-#ifndef fgets(line, n, stdin)
+#ifndef fgets
 #define fgets(line, n, stdin) line=fgets(line, n, stdin)
  
 int
@@ -29,6 +29,7 @@ ui(void)
     char *line, *str;
     size_t n = BUFSIZ;
     
+    /* Keep It Simple, Stupid ;-) */
     line = (char *) malloc(BUFSIZ*sizeof(char));
     str  = (char *) malloc(BUFSIZ*sizeof(char));
     
@@ -57,7 +58,6 @@ ui(void)
     sscanf(line, "%lf", &Vf);
 
     /* 3D plotting of chi squared */
-
     printf(
           "Plot squared residuals (it may take a long time)?  [%s] ", 
            BOOL2yn(PlotSquareResiduals)
@@ -69,6 +69,8 @@ ui(void)
     return 0;
 }
 
-#undef fgets(line, n, stdin)
+#undef fgets
 #endif
+
+
 
