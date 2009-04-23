@@ -323,7 +323,7 @@ fit(struct data * d,
       
       printf ("Gamma = %.5f +/- %.5f\n", *Gamma_best, c*ERR(0));
       printf ("Delta = %.5f +/- %.5f\n", *Delta_best, c*ERR(1));
-      printf ("cov(Gamma, Delta) = %.5f\n", COV);
+      printf ("cov(Gamma, Delta) = %.8f\n", COV);
     }
   
   /* printf ("status = %s\n", gsl_strerror (status)); */

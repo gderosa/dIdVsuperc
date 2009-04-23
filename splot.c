@@ -47,8 +47,7 @@ splot(const double Gamma, const double Delta, const double DGamma, const double 
         {
           for (j=0; j<SPLOTSTEPS; j++)
             {
-               
-	      Gamma_var = Gamma_start + i*Gamma_step;
+	            Gamma_var = Gamma_start + i*Gamma_step;
               Delta_var = Delta_start + j*Delta_step;
               
               gsl_vector_set(params, 0, Gamma_var);
@@ -59,15 +58,18 @@ splot(const double Gamma, const double Delta, const double DGamma, const double 
                       Gamma_var, 
                       Delta_var, 
                       squared_residuals(params, d) / (d->n - 2) /* chi^2/DoF */
-                      );
+              );
 	       
-	      printf(
+	            /* progress indicator (percent.) */
+              printf(
                      "  in %s ... %03.1f%%\r",
-		     chi_filename,
-                     (100.0*((double)i))/(double)(SPLOTSTEPS)
-                     ); /* progress indicator (percent.) */
-
-	    }
+		                 chi_filename,
+                     ((double)(i*SPLOTSTEPS + j)/(SPLOTSTEPS*SPLOTSTEPS))*100.0
+              );
+              fflush(stdout);
+             
+            
+	          }
           fprintf(file, "\n");
         }
       

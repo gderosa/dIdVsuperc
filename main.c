@@ -19,6 +19,15 @@
 
 #include "common.h"
 
+/* used only in this file */
+int write_results(
+                  double Gamma_best_final,
+                  double sigma_Gamma,
+                  double Delta_best_final,
+                  double sigma_Delta,
+                  double COV,
+                  char * name);
+
 int 
 main (void) 
 {
@@ -87,7 +96,16 @@ main (void)
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
 
 #define Gamma_best_final Gamma_best_step2  
-#define Delta_best_final Delta_best_step2  
+#define Delta_best_final Delta_best_step2 
+#define COV gsl_matrix_get(cov_Gamma_Delta, 1, 0)
+
+  write_results(
+		  Gamma_best_final, 
+		  sigma_Gamma, 
+		  Delta_best_final, 
+		  sigma_Delta,
+		  COV,
+		  ExpDataFile);
   
   plot(Gamma_best_final, Delta_best_final, &d);
 
@@ -100,4 +118,28 @@ main (void)
   gsl_matrix_free(cov_Gamma_Delta);
   return 0;
 }
+
+int write_results(
+                  double Gamma,
+                  double sigma_Gamma,
+                  double Delta,
+                  double sigma_Delta,
+                  double cov,
+                  char * name)
+{
+  FILE * f;
+
+  strcat(name,".out");
+  
+  f = fopen(name, "w");
+  
+  fprintf(f, "Gamma = %f +/- %f\n", Gamma, sigma_Gamma);
+  fprintf(f, "Delta = %f +/- %f\n", Delta, sigma_Delta);
+  fprintf(f, "cov(Gamma, Delta) = %f \n", cov);
+
+  fclose(f);
+
+  return 0;
+}
+
 
