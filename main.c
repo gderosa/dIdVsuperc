@@ -128,10 +128,12 @@ int write_results(
                   char * name)
 {
   FILE * f;
+  char str[BUFSIZ];
 
-  strcat(name,".out");
+  strcpy(str, name); 
+  strcat(str,".out");
   
-  f = fopen(name, "w");
+  f = fopen(str, "w");
   
   fprintf(f, "Gamma = %f +/- %f\n", Gamma, sigma_Gamma);
   fprintf(f, "Delta = %f +/- %f\n", Delta, sigma_Delta);

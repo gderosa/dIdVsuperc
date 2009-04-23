@@ -41,7 +41,7 @@ splot(const double Gamma, const double Delta, const double DGamma, const double 
       strcat(chi_filename, ".chi");
       file = fopen(chi_filename, "w");
 
-      printf("Saving data for plotting (chi^2(Delta, Gamma))\n");
+      printf("Saving data for plotting (chi^2(Delta, Gamma)/DoF)\n");
   
       for (i=0; i<SPLOTSTEPS; i++)
         {
@@ -74,7 +74,7 @@ splot(const double Gamma, const double Delta, const double DGamma, const double 
         }
       
       
-      printf("  in %s ... done.\n", chi_filename);
+      printf("  in %s ... done.  \n", chi_filename);
       
       fclose(file);
       gsl_vector_free(params);
