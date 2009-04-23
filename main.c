@@ -135,7 +135,7 @@ int write_results(
   
   fprintf(f, "Gamma = %f +/- %f\n", Gamma, sigma_Gamma);
   fprintf(f, "Delta = %f +/- %f\n", Delta, sigma_Delta);
-  fprintf(f, "cov(Gamma, Delta) = %f \n", cov);
+  fprintf(f, "cov(Gamma, Delta) = %.8f \n", cov);
 
   fclose(f);
 
