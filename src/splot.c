@@ -73,7 +73,6 @@ splot(const double Gamma, const double Delta, const double DGamma, const double 
           fprintf(file, "\n");
         }
       
-      
       printf("  in %s ... done.  \n", chi_filename);
       
       fclose(file);

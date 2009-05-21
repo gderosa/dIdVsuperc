@@ -61,7 +61,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
 }
 
 /* squared residuals ("chi squared") are first minimized through a Simplex algorithm,
- * before being minimized by an actual nonlinear fit (which, most importantly,
+ * before being minimized by a derivatives-based nonlinear fit (which, most importantly,
  * estimates statistical errors on best-fit parameters)
  */
 double 
