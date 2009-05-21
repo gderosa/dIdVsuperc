@@ -1,0 +1,19 @@
+dIdVsuperc - Copyright 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>
+
+Differential conductance of superconductors.
+
+Experimental data taken from Scanning Tunneling Spectroscopy (STS)
+are fitted against the (modified) BCS model. Delta and Gamma parameters 
+are found through chi-squared minization: Nelder-Mead "Simplex" and 
+Levenberg-Marquardt algorithms are used.
+
+This program is Free Software (see COPYING) and is based on the 
+GNU Scientific Library (http://www.gnu.org/software/gsl/).
+
+Developed during a Laboratory course at the University of Naples 
+"Federico II", "Dipartimento di Scienze Fisiche".
+
+Thanks to the researchers Roberto Di Capua, Alessandro Gambardella and 
+Marco Salluzzo, and to my fellow students Graziano Incalza and Tiziana Spina. 
+
+
