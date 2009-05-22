@@ -41,7 +41,7 @@
 #define   Delta2_0_default          7.0
 #define   alpha1_0_default          0.7             /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
-#define   ExpDataFile_default       DATADIR"/sample.dat" 
+#define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
 #define   Vi_default                -HUGE_VAL
 #define   Vf_default                HUGE_VAL
 
