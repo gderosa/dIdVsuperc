@@ -59,6 +59,7 @@ double array_max(double *ary, size_t n)
 
 /* User Interface */
 
+/* DISABLED...
 const char * 
 BOOL2yn(BOOL b) 
 {
@@ -75,3 +76,4 @@ yn2BOOL(char * str)
     return 1;
   return 0;
 }
+*/

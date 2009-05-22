@@ -20,7 +20,13 @@
 #include "common.h"
 
 int 
-plot(const double Gamma, const double Delta, struct data * d)
+plot(
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1, 
+  struct data * d
+)
 {
   double V, V_plot_i, V_plot_f;
   double V_exp_min = array_min(d->X,d->n); 
@@ -40,7 +46,12 @@ plot(const double Gamma, const double Delta, struct data * d)
   V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio; 
   for (V=V_plot_i; V<V_plot_f; V+=0.03534234) /* "random" step... */  
     {
-      fprintf(file, "%.8f \t %.8f \n", V, Gin(V, Gamma, Delta, T0));       
+      fprintf(
+        file, 
+        "%.8f \t %.8f \n", 
+        V, 
+        Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T0)
+      );       
     }  
 
   fclose(file);
