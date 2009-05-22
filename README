@@ -1,11 +1,12 @@
-dIdVsuperc - Copyright 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>
+dIdVsuperc-doubleDelta 
+Copyright 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>
 
-Differential conductance of superconductors.
+Fork of dIdVsuperc (hg repository at http://bitbucket.org/gderosa/didvsuperc/).
 
-Experimental data taken from Scanning Tunneling Spectroscopy (STS)
-are fitted against the (modified) BCS model. Delta and Gamma parameters 
-are found through chi-squared minization: Nelder-Mead "Simplex" and 
-Levenberg-Marquardt algorithms are used.
+This fork takes into account the double-gap superconducting feature of 
+MgB2 (magnesium diboride) and - presumably - other materials. See, 
+for example: F.Giubileo et al, "Strong coupling and double-gap density of 
+states in superconducting MgB2", Europhys. Lett., 58 (5), pp. 764–770 (2002).
 
 This program is Free Software (see COPYING) and is based on the 
 GNU Scientific Library (http://www.gnu.org/software/gsl/).
