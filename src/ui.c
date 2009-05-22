@@ -19,7 +19,7 @@
 
 #include "common.h"
 
-/* just to avoid anooying warnings */
+/* just to avoid annoying warnings */
 #ifndef fgets
 #define fgets(line, n, stdin) line=fgets(line, n, stdin)
  
@@ -37,9 +37,17 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Gamma0);
     
-    printf("Initial value for Delta                     [%g] ", Delta0);
+    printf("Initial value for Delta1                    [%g] ", Delta1_0);
     fgets(line, n, stdin);
-    sscanf(line, "%lf", &Delta0);
+    sscanf(line, "%lf", &Delta1_0);
+
+    printf("Initial value for Delta2                    [%g] ", Delta2_0);
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Delta2_0);
+ 
+     printf("Initial value for alpha1                    [%g] ", alpha1_0);
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &alpha1_0);
     
     printf("Absolute temperature                        [%g] ", T0);
     fgets(line, n, stdin);
@@ -56,15 +64,6 @@ ui(void)
     printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Vf);
-
-    /* 3D plotting of chi squared */
-    printf(
-          "Plot squared residuals (it may take a long time)?  [%s] ", 
-           BOOL2yn(PlotSquareResiduals)
-          );
-    fgets(line, n, stdin);
-    sscanf(line, "%s", str);
-    PlotSquareResiduals = yn2BOOL(str);
 
     return 0;
 }
