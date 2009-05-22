@@ -38,8 +38,10 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
   double *Y       = ((const struct data *)data)->Y;
   double *sigmaY  = ((const struct data *)data)->sigmaY;
   
-  double Gamma = gsl_vector_get (params, 0);
-  double Delta = gsl_vector_get (params, 1);
+  double Gamma  = gsl_vector_get (params, 0);
+  double Delta1 = gsl_vector_get (params, 1);
+  double Delta2 = gsl_vector_get (params, 2);
+  double alpha1 = gsl_vector_get (params, 3); /* alpha1 + alpha2 = 1 */
   
   double theory, experiment;
   
@@ -53,7 +55,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
         /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
       if (X[i]<Vi || X[i]>Vf) continue; 
       
-      theory = Gin(X[i], Gamma, Delta, T0);
+      theory = Gin_doubleDelta(X[i], Gamma, Delta1, Delta2, alpha1, T0);
       experiment = Y[i];
       gsl_vector_set (f, i, (theory - experiment)/sigmaY[i]);
     }  
@@ -88,20 +90,30 @@ squared_residuals(const gsl_vector * params, void * data)
 double 
 squared_residuals_w_constraints(const gsl_vector * params, void * data)
 {
-  double Gamma = gsl_vector_get (params, 0);
-  double Delta = gsl_vector_get (params, 1);
+  double Gamma  = gsl_vector_get (params, 0);
+  double Delta1 = gsl_vector_get (params, 1);
+  double Delta2 = gsl_vector_get (params, 2);
+  double alpha1 = gsl_vector_get (params, 3);
   
-  if (Gamma < 0) return HUGE_VAL;
-  if (Delta < 0) return HUGE_VAL;
+  if (Gamma   < 0)                    return HUGE_VAL;
+  if (Delta1  < 0)                    return HUGE_VAL;
+  if (Delta2  < 0)                    return HUGE_VAL;  
+  if (alpha1  < 0.66 || alpha1 > 1.0) return HUGE_VAL;
+  
   return squared_residuals(params, data);
 }
 
 int
-simplex(const double Gamma_init, 
-        const double Delta_init, 
-        struct data * d, 
-        double * Gamma_best, 
-        double * Delta_best)
+simplex(
+  const double Gamma_init, 
+  const double Delta1_init,
+  const double Delta2_init,  
+  const double alpha1_init,
+  struct data * d, 
+  double * Gamma_best, 
+  double * Delta1_best,
+  double * Delta2_best,
+  double * alpha1_best)
 /* Inspired by http://www.gnu.org/software/gsl/manual/html_node/Multimin-Examples.html */
 {
   const gsl_multimin_fminimizer_type * T = gsl_multimin_fminimizer_nmsimplex;
@@ -113,29 +125,38 @@ simplex(const double Gamma_init,
   int status;
   double size;
   
-    /* Starting point */
-  x = gsl_vector_alloc (2);
+  /* Starting point */
+  x = gsl_vector_alloc (4);  
   gsl_vector_set (x, 0, Gamma_init);
-  gsl_vector_set (x, 1, Delta_init);
+  gsl_vector_set (x, 1, Delta1_init);
+  gsl_vector_set (x, 2, Delta2_init);
+  gsl_vector_set (x, 3, alpha1_init);  
   
   /* Set initial step sizes */
-  ss = gsl_vector_alloc (2);
+  ss = gsl_vector_alloc (4);
   /* In practice, these ones seem the best... */
   gsl_vector_set (ss, 0, Gamma_init/7. + 0.04);
-  gsl_vector_set (ss, 1, Delta_init/7. + 0.04);
+  gsl_vector_set (ss, 1, Delta1_init/7. + 0.04);
+  gsl_vector_set (ss, 2, Delta2_init/7. + 0.04);
+  gsl_vector_set (ss, 3, 0.1);                    /* related to alpha1 */
   
   /* Initialize method and iterate */
-  minex_func.n = 2;
+  minex_func.n = 4;
   minex_func.f = &squared_residuals_w_constraints;
   minex_func.params = (void *) d;
   
-  s = gsl_multimin_fminimizer_alloc (T, 2);
+  s = gsl_multimin_fminimizer_alloc (T, 4);
   gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
   
-  printf ("%5d %+.8f %+.8f chi^2 = %011.8f size =  ---\n", 
+  printf ("iter=%5d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f size= ---\n", 
+  
            (int) iter,
+           
            gsl_vector_get (s->x, 0), 
            gsl_vector_get (s->x, 1), 
+           gsl_vector_get (s->x, 2), 
+           gsl_vector_get (s->x, 3),            
+           
            squared_residuals (x, d)
          ); 
   do
@@ -153,14 +174,20 @@ simplex(const double Gamma_init,
         {
           printf ("converged to minimum at\n");
         }
-      * Gamma_best = gsl_vector_get (s->x, 0);
-      * Delta_best = gsl_vector_get (s->x, 1);
-      
-      printf ("%5d %+.8f %+.8f chi^2 = %011.8f size = %.8f\n", 
+      * Gamma_best  = gsl_vector_get (s->x, 0);
+      * Delta1_best = gsl_vector_get (s->x, 1);
+      * Delta2_best = gsl_vector_get (s->x, 2);
+      * alpha1_best = gsl_vector_get (s->x, 3);
+            
+      printf ("iter=%5d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f size=%.8f\n", 
               (int) iter,
               * Gamma_best, 
-              * Delta_best, 
-              s->fval, size);
+              * Delta1_best,
+              * Delta2_best, 
+              * alpha1_best,                              
+              s->fval, 
+              size
+      );
     }
   while (status == GSL_CONTINUE && iter < 100);
   
@@ -185,12 +212,14 @@ residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J)
   double *Y       = ((struct data *)data)->Y;
   double *sigmaY  = ((struct data *)data)->sigmaY;
   
-  double Gamma = gsl_vector_get (params, 0);
-  double Delta = gsl_vector_get (params, 1);
-  
+  double Gamma  = gsl_vector_get (params, 0);
+  double Delta1 = gsl_vector_get (params, 1);
+  double Delta2 = gsl_vector_get (params, 2);
+  double alpha1 = gsl_vector_get (params, 3);
+      
   size_t i;
   
-  double Ji0, Ji1;
+  double Ji0, Ji1, Ji2, Ji3;
   
   for (i = 0; i < n; i++)
     {
@@ -198,11 +227,15 @@ residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J)
       /* where fi = (theory - experiment)/sigmaY[i], */
       /* and paramsj = Gamma, Delta */
       
-      Ji0 = ( dGin_dGamma (X[i], Gamma, Delta, T0) - Y[i] ) / sigmaY[i];
-      Ji1 = ( dGin_dDelta (X[i], Gamma, Delta, T0) - Y[i] ) / sigmaY[i];
-      
+      Ji0 = ( dGin_doubleDelta_dGamma (X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+      Ji1 = ( dGin_doubleDelta_dDelta1(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+      Ji2 = ( dGin_doubleDelta_dDelta2(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+      Ji3 = ( dGin_doubleDelta_dalpha1(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+                  
       gsl_matrix_set (J, i, 0, Ji0); 
       gsl_matrix_set (J, i, 1, Ji1);
+      gsl_matrix_set (J, i, 2, Ji2); 
+      gsl_matrix_set (J, i, 3, Ji3);      
     }
 
   return GSL_SUCCESS;  
@@ -228,11 +261,16 @@ residuals_fdf(const gsl_vector * params,
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF)
 {
-  printf ("iter: %3u // Gamma = %.8f Delta = %.8f"
+  printf ("iter=%3u Gamma=%.8f Delta1=%.8f Delta2=%.8f alpha1=%.8f"
                " chi^2 = %.10f chi^2/DoF = %.10f\n",
+               
                (unsigned int) iter,
+               
                gsl_vector_get(s->x, 0), 
                gsl_vector_get(s->x, 1),
+               gsl_vector_get(s->x, 2), 
+               gsl_vector_get(s->x, 3),               
+               
                gsl_pow_2(gsl_blas_dnrm2(s->f)),
                gsl_pow_2(gsl_blas_dnrm2(s->f))/DoF
           );
@@ -241,9 +279,13 @@ print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF)
 int 
 fit(struct data * d,
     const double Gamma_init,
-    const double Delta_init,
+    const double Delta1_init,
+    const double Delta2_init,
+    const double alpha1_init,        
     double *Gamma_best, 
-    double *Delta_best, 
+    double *Delta1_best,
+    double *Delta2_best, 
+    double *alpha1_best,          
     gsl_matrix *cov,
     double * reduced_chi_square)
 /* strongly based on http://www.gnu.org/software/gsl/manual/html_node/
@@ -256,14 +298,16 @@ fit(struct data * d,
   int status;
   unsigned int iter = 0;
   const size_t n = d->n;
-  const size_t p = 2;
+  const size_t p = 4;
   gsl_matrix *covar = gsl_matrix_alloc (p, p);
   gsl_multifit_function_fdf f;
-  double x_init[2]; /* initial guess for (Gamma, Delta) */
+  double x_init[4]; /* initial guess for (Gamma, Delta) */
   gsl_vector_view x = gsl_vector_view_array (x_init, p);
   
   x_init[0] = Gamma_init;
-  x_init[1] = Delta_init;
+  x_init[1] = Delta1_init;
+  x_init[2] = Delta2_init;
+  x_init[3] = alpha1_init;    
   
   f.f   = &residuals_vector_f;
   f.df  = &residuals_jacobian_df;
@@ -301,10 +345,13 @@ fit(struct data * d,
   
 #define FIT(i) gsl_vector_get(s->x, i)
 #define ERR(i) sqrt(gsl_matrix_get(covar,i,i))  
-#define COV    gsl_matrix_get(covar,0,1)
-#define COV1   gsl_matrix_get(covar,1,0)
-  
-  assert(COV==COV1); /* covariance matrix is simmetric! */
+/* now parameters are 4, not just 2...
+ *
+ * #define COV    gsl_matrix_get(covar,0,1)
+ * #define COV1   gsl_matrix_get(covar,1,0)
+ *
+ * assert(COV==COV1);
+ */
   
     { 
       double chi = gsl_blas_dnrm2(s->f);
@@ -318,12 +365,17 @@ fit(struct data * d,
 
       printf("chi^2/DoF = %g\n", *reduced_chi_square);
       
-      *Gamma_best = FIT(0);
-      *Delta_best = FIT(1);
-      
-      printf ("Gamma = %.5f +/- %.5f\n", *Gamma_best, c*ERR(0));
-      printf ("Delta = %.5f +/- %.5f\n", *Delta_best, c*ERR(1));
-      printf ("cov(Gamma, Delta) = %.8f\n", COV);
+       *Gamma_best = FIT(0);
+      *Delta1_best = FIT(1);
+      *Delta2_best = FIT(2);
+      *alpha1_best = FIT(3);
+                  
+      printf ("Gamma  = %.5f +/- %.5f\n", *Gamma_best, c*ERR(0));
+      printf ("Delta1 = %.5f +/- %.5f\n", *Delta_best, c*ERR(1));
+      printf ("Delta2 = %.5f +/- %.5f\n", *Delta_best, c*ERR(2));
+      printf ("alpha1 = %.5f +/- %.5f\n", *Delta_best, c*ERR(3));            
+      /* printf ("cov(Gamma, Delta) = %.8f\n", COV); */ 
+        /* now there are actually 4*3/2 = 6 independent covariances! */
     }
   
   /* printf ("status = %s\n", gsl_strerror (status)); */

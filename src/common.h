@@ -37,7 +37,9 @@
 #define   DATADIR                   "data"
 #define   T0_default                4.2             /* Kelvin degrees */
 #define   Gamma0_default            0.7
-#define   Delta0_default            2.5
+#define   Delta1_0_default          2.5
+#define   Delta2_0_default          7.0
+#define   alpha1_0_default          0.7             /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/sample.dat" 
 #define   Vi_default                -HUGE_VAL
@@ -48,9 +50,10 @@
 /* Plotting */
 #define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
 
-/* 3D plotting of chi^2 as a function of Gamma and Delta */
-#define   SPLOTSTEPS                72
-#define   SPLOTSIGMAS               10
+/* 3D plotting of chi^2 as a function of Gamma and Delta (DISABLED)
+ * #define   SPLOTSTEPS                72 
+ * #define   SPLOTSIGMAS               10
+ */
 
 /* for num. integration: */
 #define   SUBINTERVALS              10000 
@@ -74,11 +77,17 @@ struct Gin_params
     double Gamma, Delta, T;
   };
   
+struct Gin_params_doubleDelta
+  {
+    double Gamma, Delta1, Delta2, alpha1, T;
+  };
+
 struct Gin_squared_residuals_params 
   {
     size_t n;
     double *X, *Y;
   };
+#define Gin_squared_residuals_params_doubleDelta Gin_squared_residuals_params 
 
 struct data { /* experimental points */
   size_t n;
@@ -90,7 +99,7 @@ struct data { /* experimental points */
 
 /* Globals */
 #ifndef GLOBALS
-extern double Gamma0, Delta0, T0, k_B, Vi, Vf;
+extern double Gamma0, Delta1_0, Delta2_0, alpha1_0, T0, k_B, Vi, Vf;
 extern char ExpDataFile[BUFSIZ];
 extern BOOL PlotSquareResiduals;
 #endif
@@ -130,28 +139,85 @@ Gin_integrand(const double u, void * params);
 double
 Gin(const double V, const double Gamma, const double Delta, const double T);
  
+double
+Gin_doubleDelta(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1, 
+  const double T);
+
+
 double 
-Gin_Gamma(const double Gamma, void * params);
+Gin_doubleDelta_Gamma(const double Gamma, void * params);
+
 double 
-dGin_dGamma(const double V, const double Gamma, const double Delta, const double T);
+dGin_doubleDelta_dGamma(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1, 
+  const double T);
+
 double 
-Gin_Delta(const double Delta, void * params);
+Gin_doubleDelta_Delta1(const double Delta1, void * params);
+
 double 
-dGin_dDelta(const double V, const double Gamma, const double Delta, const double T);
+dGin_doubleDelta_dDelta1(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1,  
+  const double T);
+
+double
+Gin_doubleDelta_Delta2(const double Delta1, void * params);
+
+double 
+dGin_doubleDelta_dDelta2(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1,  
+  const double T);
+
+double
+Gin_doubleDelta_alpha1(const double alpha1, void * params);
+
+double 
+dGin_doubleDelta_dalpha1(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2, 
+  const double alpha1,  
+  const double T);
+
 
 int 
 residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f);
 
 double 
 squared_residuals(const gsl_vector * params, void * data);
+
 double 
 squared_residuals_w_constraints(const gsl_vector * params, void * data);
+
 int
-simplex(const double Gamma_init, 
-        const double Delta_init, 
-        struct data * d, 
-        double * Gamma_best, 
-        double * Delta_best);
+simplex(
+  const double Gamma_init, 
+  const double Delta1_init,
+  const double Delta2_init,  
+  const double alpha1_inti,
+  struct data * d, 
+  double * Gamma_best, 
+  double * Delta1_best,
+  double * Delta2_best,
+  double * alpha1_best);
 
 int
 residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J);
@@ -160,12 +226,17 @@ residuals_fdf(const gsl_vector * params,
               void * data,
               gsl_vector * f,
               gsl_matrix * J);
+
 int 
 fit(struct data * d,    
     const double Gamma_init,
-    const double Delta_init,    
+    const double Delta1_init,    
+    const double Delta2_init,
+    const double alpha1_init,
     double *Gamma, 
-    double *Delta, 
+    double *Delta1,
+    double *Delta2,
+    double *alpha1, 
     gsl_matrix * cov,
     double * chisquared);
 
@@ -179,16 +250,20 @@ int
 ui(void);
 
 int 
-plot(const double Gamma, const double Delta, struct data * d);
+plot(const double Gamma, const double Delta1, const double Delta2, const double alpha1, struct data * d);
 
-int
-splot(const double Gamma, const double Delta, const double DGamma, const double DDelta, struct data * d);
+/* DISABLED 3D plotting of.... argh, actually it would require 5 dimensions!!
+ *int
+ * splot(const double Gamma, const double Delta, const double DGamma, const double DDelta, struct data * d); 
+ */
 
-const char * 
-BOOL2yn(BOOL b);
-
-BOOL
-yn2BOOL(char * str);
+/* the following were required only for chi-squared plotting, so....
+ * const char * 
+ * BOOL2yn(BOOL b);
+ *
+ * BOOL
+ * yn2BOOL(char * str);
+ */
 
 
 
