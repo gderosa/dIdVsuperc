@@ -12,7 +12,18 @@ set(LIBS ${LIBS} ${GSL_LIBRARIES} ${GSLCBLAS_LIBRARIES})
 target_link_libraries(${LIBS})
 link_libraries(${LIBS})
 
-add_executable(dIdVsuperc src/common.h src/fit.c src/functions.c src/globals.c src/init.c src/main.c src/misc.c src/plot.c src/splot.c src/ui.c) 
+add_executable(
+	dIdVsuperc 
+		src/common.h 
+		src/fit.c 
+		src/functions.c 
+		src/globals.c 
+		src/init.c 
+		src/main.c 
+		src/misc.c 
+		src/plot.c 
+		src/ui.c
+) 
 
 
 
