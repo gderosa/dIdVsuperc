@@ -24,7 +24,9 @@ init(void)
   {
     T0          = T0_default;
     Gamma0      = Gamma0_default;
-    Delta0      = Delta0_default;
+    Delta1_0    = Delta1_0_default;
+    Delta2_0    = Delta2_0_default;
+    alpha1_0    = alpha1_0_default;
     k_B         = k_B_default;
     Vi		= Vi_default;
     Vf		= Vf_default;
