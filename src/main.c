@@ -138,13 +138,13 @@ main (void)
 	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,0,0)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
   sigma_Delta1 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha2,1,1)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,1,1)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
   sigma_Delta2 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha2,2,2)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,2,2)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
   sigma_alpha1 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha2,3,3)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,3,3)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
 
 #define  Gamma_best_final  Gamma_best_step2  
@@ -183,11 +183,13 @@ main (void)
  *      printf("\n");
  *      splot(Gamma_best_final, Delta_best_final, SPLOTSIGMAS*sigma_Gamma, SPLOTSIGMAS*sigma_Delta, &d);
  *    }
- *
- *  gsl_matrix_free(cov_Gamma_Delta);
- *  return 0;
- * }
  */
+ 
+  gsl_matrix_free(cov_Gamma_Delta1_Delta2_alpha1);
+ 
+  return 0;
+}
+
 
 int write_results(
   double Gamma,

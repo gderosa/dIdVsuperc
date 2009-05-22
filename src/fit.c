@@ -370,10 +370,10 @@ fit(struct data * d,
       *Delta2_best = FIT(2);
       *alpha1_best = FIT(3);
                   
-      printf ("Gamma  = %.5f +/- %.5f\n", *Gamma_best, c*ERR(0));
-      printf ("Delta1 = %.5f +/- %.5f\n", *Delta_best, c*ERR(1));
-      printf ("Delta2 = %.5f +/- %.5f\n", *Delta_best, c*ERR(2));
-      printf ("alpha1 = %.5f +/- %.5f\n", *Delta_best, c*ERR(3));            
+      printf ("Gamma  = %.5f +/- %.5f\n",  *Gamma_best, c*ERR(0));
+      printf ("Delta1 = %.5f +/- %.5f\n", *Delta1_best, c*ERR(1));
+      printf ("Delta2 = %.5f +/- %.5f\n", *Delta2_best, c*ERR(2));
+      printf ("alpha1 = %.5f +/- %.5f\n", *alpha1_best, c*ERR(3));            
       /* printf ("cov(Gamma, Delta) = %.8f\n", COV); */ 
         /* now there are actually 4*3/2 = 6 independent covariances! */
     }
