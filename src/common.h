@@ -77,7 +77,7 @@ struct Gin_params
     double Gamma, Delta, T;
   };
   
-struct Gin_params_doubleDelta
+struct Gin_doubleDelta_params
   {
     double Gamma, Delta1, Delta2, alpha1, T;
   };
@@ -147,7 +147,6 @@ Gin_doubleDelta(
   const double Delta2, 
   const double alpha1, 
   const double T);
-
 
 double 
 Gin_doubleDelta_Gamma(const double Gamma, void * params);

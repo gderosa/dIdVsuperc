@@ -102,64 +102,177 @@ Gin(const double V, const double Gamma, const double Delta, const double T)
   return integral_result / (k_B * T);
 }
 
-/* Gin as a function of Gamma; V, Delta, T as parametrs */
+double
+Gin_doubleDelta(
+  const double V,
+  const double Gamma,
+  const double Delta1,
+  const double Delta2,
+  const double alpha1,
+  const double T)
+{
+  return alpha1*Gin(V, Gamma, Delta1, T) + (1-alpha1)*Gin(V, Gamma, Delta2, T);
+}
+
+/* Gin as a function of Gamma; V, Delta1, Delta2, alpha1, T as parametrs */
 double 
-Gin_Gamma(const double Gamma, void * params)
+Gin_doubleDelta_Gamma(const double Gamma, void * params)
 {
   double * p = (double *) params;
   double V      = p[0];
-  double Delta  = p[1];
-  double T      = p[2];
-  return Gin(V, Gamma, Delta, T);
+  double Delta1 = p[1];
+  double Delta2 = p[2];
+  double alpha1 = p[3];
+  double T      = p[4];
+  return Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T);
 }
 
 double 
-dGin_dGamma(const double V, const double Gamma, const double Delta, const double T)
+dGin_doubleDelta_dGamma(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2,
+  const double alpha1,
+  const double T)
 {
   gsl_function F;
-  double params[3];
+  double params[5];
   double result, abserr;
   int status;
   
   params[0] = V;
-  params[1] = Delta;
-  params[2] = T;
+  params[1] = Delta1;
+  params[2] = Delta2;
+  params[3] = alpha1;
+  params[4] = T;
   
-  F.function = &Gin_Gamma;
-  F.params = &params;
+  F.function  = &Gin_doubleDelta_Gamma;
+  F.params    = &params;
   
   status = gsl_deriv_central (&F, Gamma, DSTEPSIZE, &result, &abserr);
   
   return result;
 }
 
-/* Gin as a function of Delta; V, Gamma, T as parametrs */
+/* Gin as a function of Delta1; V, Gamma, Delta2, alpha1, T as parametrs */
 double 
-Gin_Delta(const double Delta, void * params)
+Gin_doubleDelta_Delta1(const double Delta1, void * params)
 {
   double * p = (double *) params;
   double V      = p[0];
   double Gamma  = p[1];
-  double T      = p[2];
-  return Gin(V, Gamma, Delta, T);
+  double Delta2 = p[2];
+  double alpha1 = p[3];
+  double T      = p[4];
+  return Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T);
 }
 
 double 
-dGin_dDelta(const double V, const double Gamma, const double Delta, const double T)
+dGin_doubleDelta_dDelta1(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2,
+  const double alpha1,
+  const double T)
 {
   gsl_function F;
-  double params[3];
+  double params[5];
   double result, abserr;
   int status;
   
   params[0] = V;
   params[1] = Gamma;
-  params[2] = T;
+  params[2] = Delta2;
+  params[3] = alpha1;
+  params[4] = T;
     
-  F.function = &Gin_Delta;
+  F.function = &Gin_doubleDelta_Delta1;
   F.params = &params;
   
-  status = gsl_deriv_central (&F, Delta, DSTEPSIZE, &result, &abserr);
+  status = gsl_deriv_central (&F, Delta1, DSTEPSIZE, &result, &abserr);
+  
+  return result;
+}
+
+double 
+Gin_doubleDelta_Delta2(const double Delta2, void * params)
+{
+  double * p = (double *) params;
+  double V      = p[0];
+  double Gamma  = p[1];
+  double Delta1 = p[2];
+  double alpha1 = p[3];
+  double T      = p[4];
+  return Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T);
+}
+
+double 
+dGin_doubleDelta_dDelta2(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2,
+  const double alpha1,
+  const double T)
+{
+  gsl_function F;
+  double params[5];
+  double result, abserr;
+  int status;
+  
+  params[0] = V;
+  params[1] = Gamma;
+  params[2] = Delta1;
+  params[3] = alpha1;
+  params[4] = T;
+    
+  F.function = &Gin_doubleDelta_Delta2;
+  F.params = &params;
+  
+  status = gsl_deriv_central (&F, Delta2, DSTEPSIZE, &result, &abserr);
+  
+  return result;
+}
+
+/* Gin as a function of alpha1; V, Gamma, Delta1, Delta2, T as parameters */
+double 
+Gin_doubleDelta_alpha1(const double alpha1, void * params)
+{
+  double * p = (double *) params;
+  double V      = p[0];
+  double Gamma  = p[1];
+  double Delta1 = p[2];
+  double Delta2 = p[3];
+  double T      = p[4];
+  return Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T);
+}
+
+double 
+dGin_doubleDelta_dalpha1(
+  const double V, 
+  const double Gamma, 
+  const double Delta1, 
+  const double Delta2,
+  const double alpha1,
+  const double T)
+{
+  gsl_function F;
+  double params[5];
+  double result, abserr;
+  int status;
+  
+  params[0] = V;
+  params[1] = Gamma;
+  params[2] = Delta1;
+  params[3] = Delta2;
+  params[4] = T;
+    
+  F.function = &Gin_doubleDelta_alpha1;
+  F.params = &params;
+  
+  status = gsl_deriv_central (&F, alpha1, DSTEPSIZE, &result, &abserr);
   
   return result;
 }
