@@ -35,12 +35,12 @@
 
 /* Constants and defaults */
 #define   DATADIR                   "data"
-#define   T0_default                4.2             /* Kelvin degrees */
-#define   Gamma1_0_default          0.199
-#define   Gamma2_0_default          0.095
-#define   Delta1_0_default          1.755
-#define   Delta2_0_default          3.174
-#define   alpha1_0_default          0.661           /* alpha1+alpha2=1 */
+#define   T0_default                4.200           /* Kelvin degrees */
+#define   Gamma1_0_default          0.200
+#define   Gamma2_0_default          0.100
+#define   Delta1_0_default          1.700
+#define   Delta2_0_default          3.200
+#define   alpha1_0_default          0.667           /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
 #define   Vi_default                -HUGE_VAL
@@ -63,23 +63,23 @@
 #define   MAX_SIMPLEX_ITER          400   /* Nelder-Mead "Simplex"            */
 #define   MAX_FIT_ITER              100   /* Levenberg-Marquardt "downhill"   */
 #define   MULTIMIN_TEST_SIZE        2e-5  /* Nelder-Mead "Simplex"            */
-#define   MULTIFIT_TEST_DELTA       1e-8  /* Levenberg-Marquardt "downhill"   */
+#define   MULTIFIT_TEST_DELTA       1e-7  /* Levenberg-Marquardt "downhill"   */
 
 /* Constraints on parameters */
-#define   CONSTRAINT_GAMMA1_MIN     0.00
+#define   CONSTRAINT_GAMMA1_MIN     0.000
 #define   CONSTRAINT_GAMMA1_MAX     HUGE_VAL
 
-#define   CONSTRAINT_GAMMA2_MIN     0.00
+#define   CONSTRAINT_GAMMA2_MIN     0.000
 #define   CONSTRAINT_GAMMA2_MAX     HUGE_VAL
 
-#define   CONSTRAINT_DELTA1_MIN     0.00
+#define   CONSTRAINT_DELTA1_MIN     0.000
 #define   CONSTRAINT_DELTA1_MAX     HUGE_VAL
 
-#define   CONSTRAINT_DELTA2_MIN     0.00
+#define   CONSTRAINT_DELTA2_MIN     0.000
 #define   CONSTRAINT_DELTA2_MAX     HUGE_VAL
 
-#define   CONSTRAINT_ALPHA1_MIN     0.66
-#define   CONSTRAINT_ALPHA1_MAX     1.00    
+#define   CONSTRAINT_ALPHA1_MIN     0.666
+#define   CONSTRAINT_ALPHA1_MAX     1.000    
 
 
 /* Types */
