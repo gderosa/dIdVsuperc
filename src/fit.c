@@ -151,10 +151,10 @@ simplex(
   /* Set initial step sizes */
   ss = gsl_vector_alloc (5);
   /* In practice, these ones seem the best... */
-  gsl_vector_set (ss, 0, Gamma1_init/7. + 0.04);
-  gsl_vector_set (ss, 1, Gamma2_init/7. + 0.04);  
-  gsl_vector_set (ss, 2, Delta1_init/7. + 0.04);
-  gsl_vector_set (ss, 3, Delta2_init/7. + 0.04);
+  gsl_vector_set (ss, 0, Gamma1_init/5. + 0.04);
+  gsl_vector_set (ss, 1, Gamma2_init/5. + 0.04);  
+  gsl_vector_set (ss, 2, Delta1_init/5. + 0.04);
+  gsl_vector_set (ss, 3, Delta2_init/5. + 0.04);
   gsl_vector_set (ss, 4, 0.1);                    /* related to alpha1 */
   
   /* Initialize method and iterate */
