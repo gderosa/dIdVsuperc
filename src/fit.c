@@ -56,7 +56,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
         /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
       if (X[i]<Vi || X[i]>Vf) continue; 
       
-      theory = Gin_doubleDelta(X[i], Gamma, Delta1, Delta2, alpha1, T0);
+      theory = Gin_doubleDeltaGamma(X[i], Gamma, Delta1, Delta2, alpha1, T0);
       experiment = Y[i];
       residual = (theory - experiment)/sigmaY[i];
       if (!constraints(

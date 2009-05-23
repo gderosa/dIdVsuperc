@@ -196,10 +196,10 @@ dGin_doubleDeltaGamma_dGamma2(
   const double T);
 
 double 
-Gin_doubleDelta_Delta1(const double Delta1, void * params);
+Gin_doubleDeltaGamma_Delta1(const double Delta1, void * params);
 
 double 
-dGin_doubleDelta_dDelta1(
+dGin_doubleDeltaGamma_dDelta1(
   const double V, 
   const double Gamma1,
   const double Gamma2,    
@@ -209,10 +209,10 @@ dGin_doubleDelta_dDelta1(
   const double T);
 
 double
-Gin_doubleDelta_Delta2(const double Delta1, void * params);
+Gin_doubleDeltaGamma_Delta2(const double Delta1, void * params);
 
 double 
-dGin_doubleDelta_dDelta2(
+dGin_doubleDeltaGamma_dDelta2(
   const double V, 
   const double Gamma1,
   const double Gamma2,    
@@ -222,10 +222,10 @@ dGin_doubleDelta_dDelta2(
   const double T);
 
 double
-Gin_doubleDelta_alpha1(const double alpha1, void * params);
+Gin_doubleDeltaGamma_alpha1(const double alpha1, void * params);
 
 double 
-dGin_doubleDelta_dalpha1(
+dGin_doubleDeltaGamma_dalpha1(
   const double V, 
   const double Gamma1,
   const double Gamma2,    
