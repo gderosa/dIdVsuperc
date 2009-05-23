@@ -17,4 +17,24 @@ Developed during a Laboratory course at the University of Naples
 Thanks to the researchers Roberto Di Capua, Alessandro Gambardella and 
 Marco Salluzzo, and to my fellow students Graziano Incalza and Tiziana Spina. 
 
+=======================================================================
 
+You will need (on Unix):
+* a C compiler
+* CMake               http://www.cmake.org/
+* GSL                 http://www.gnu.org/software/gsl/
+* Make
+* Perl (optional)     http://www.perl.org/
+* Gnuplot (optional)  http://www.gnuplot.info/
+
+Simply type:
+  cmake .
+  make
+  ./dIdVsuperc
+
+To build graphical plots (requires Perl and Gnuplot)
+  ./util/plot-all.pl
+
+Enjoy!
+
+TODO: add instructions for a Microsoft Windows build/port
