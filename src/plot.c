@@ -21,7 +21,8 @@
 
 int 
 plot(
-  const double Gamma, 
+  const double Gamma1,
+  const double Gamma2,    
   const double Delta1, 
   const double Delta2, 
   const double alpha1, 
@@ -50,7 +51,7 @@ plot(
         file, 
         "%.8f \t %.8f \n", 
         V, 
-        Gin_doubleDelta(V, Gamma, Delta1, Delta2, alpha1, T0)
+        Gin_doubleDeltaGamma(V, Gamma1, Gamma2, Delta1, Delta2, alpha1, T0)
       );       
     }  
 
