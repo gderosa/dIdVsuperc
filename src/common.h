@@ -38,7 +38,7 @@
 #define   T0_default                4.2             /* Kelvin degrees */
 #define   Gamma0_default            0.7
 #define   Delta1_0_default          2.5
-#define   Delta2_0_default          7.0
+#define   Delta2_0_default          6.9
 #define   alpha1_0_default          0.7             /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
@@ -62,6 +62,10 @@
 
 /* for num. differentiation */
 #define   DSTEPSIZE                 2e-7  
+
+/* (chi squared) minimization algorithms */
+#define   MAX_SIMPLEX_ITER          200 /* Nelder-Mead */
+#define   MAX_FIT_ITER              200 /* Lenvenberg-Marquardt */
 
 /* Types */
 

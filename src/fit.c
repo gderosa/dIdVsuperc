@@ -189,7 +189,7 @@ simplex(
               size
       );
     }
-  while (status == GSL_CONTINUE && iter < 100);
+  while (status == GSL_CONTINUE && iter < MAX_SIMPLEX_ITER);
   
   gsl_vector_free(x);
   gsl_vector_free(ss);
@@ -337,7 +337,7 @@ fit(struct data * d,
      
       status = gsl_multifit_test_delta (s->dx, s->x, 0, 1e-6); 
     }
-  while (status == GSL_CONTINUE &&  iter < 500);
+  while (status == GSL_CONTINUE &&  iter < MAX_FIT_ITER);
   
   gsl_multifit_covar (s->J, 0.0, covar);
   
