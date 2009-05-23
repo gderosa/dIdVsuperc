@@ -29,7 +29,7 @@ int write_results(
                   double sigma_Delta1,
                   double sigma_Delta2,
                   double sigma_alpha1,
-                  /* double COV, */ /* there are so many covariances now! */
+                  double reduced_chi_squared,
                   char * name);
 
 int 
@@ -165,7 +165,7 @@ main (void)
 	  sigma_Delta2,
  	  alpha1_best_final, 
 	  sigma_alpha1,
-	  /* COV, */
+	  reduced_chi_square,
 	  ExpDataFile
   );
   
@@ -200,7 +200,7 @@ int write_results(
   double sigma_Delta2,
   double alpha1,
   double sigma_alpha1,
-  /* double cov, */
+  double reduced_chi_squared,
   char * name
 )
 {
@@ -212,10 +212,12 @@ int write_results(
   
   f = fopen(str, "w");
   
-  fprintf(f, "Gamma  = %f +/- %f\n", Gamma,  sigma_Gamma);
-  fprintf(f, "Delta1 = %f +/- %f\n", Delta1, sigma_Delta1);
-  fprintf(f, "Delta2 = %f +/- %f\n", Delta2, sigma_Delta2);
-  fprintf(f, "alpha1 = %f +/- %f\n", alpha1, sigma_alpha1);
+  fprintf(f, "Gamma     = %f +/- %f\n", Gamma,  sigma_Gamma );
+  fprintf(f, "Delta1    = %f +/- %f\n", Delta1, sigma_Delta1);
+  fprintf(f, "Delta2    = %f +/- %f\n", Delta2, sigma_Delta2);
+  fprintf(f, "alpha1    = %f +/- %f\n", alpha1, sigma_alpha1);
+  fprintf(f, "\n"                                           );
+  fprintf(f, "chi^2/DoF = %f \n", reduced_chi_squared);
   
   /* fprintf(f, "cov(Gamma, Delta) = %.8f \n", cov); */
 
