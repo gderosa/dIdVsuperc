@@ -43,7 +43,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
   double Delta2 = gsl_vector_get (params, 2);
   double alpha1 = gsl_vector_get (params, 3); /* alpha1 + alpha2 = 1 */
   
-  double theory, experiment;
+  double theory, experiment, residual;
   
   size_t i;
   
@@ -57,7 +57,15 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
       
       theory = Gin_doubleDelta(X[i], Gamma, Delta1, Delta2, alpha1, T0);
       experiment = Y[i];
-      gsl_vector_set (f, i, (theory - experiment)/sigmaY[i]);
+      residual = (theory - experiment)/sigmaY[i];
+      if (!constraints(
+        Gamma,
+        Delta1,
+        Delta2,
+        alpha1
+      )) residual = residual * HUGE_VAL; 
+
+      gsl_vector_set (f, i, residual);
     }  
   return GSL_SUCCESS;
 }
@@ -84,9 +92,6 @@ squared_residuals(const gsl_vector * params, void * data)
   return result; 
 }
 
-/* A naive implementation of constraints: just return HUGE_VAL when parameters
- * are outside the desired domain
- */
 double 
 squared_residuals_w_constraints(const gsl_vector * params, void * data)
 {
@@ -94,11 +99,13 @@ squared_residuals_w_constraints(const gsl_vector * params, void * data)
   double Delta1 = gsl_vector_get (params, 1);
   double Delta2 = gsl_vector_get (params, 2);
   double alpha1 = gsl_vector_get (params, 3);
-  
-  if (Gamma   < 0)                    return HUGE_VAL;
-  if (Delta1  < 0)                    return HUGE_VAL;
-  if (Delta2  < 0)                    return HUGE_VAL;  
-  if (alpha1  < 0.66 || alpha1 > 1.0) return HUGE_VAL;
+
+  if (!constraints(
+    Gamma,
+    Delta1,
+    Delta2,
+    alpha1
+  )) return HUGE_VAL;
   
   return squared_residuals(params, data);
 }
@@ -148,7 +155,7 @@ simplex(
   s = gsl_multimin_fminimizer_alloc (T, 4);
   gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
   
-  printf ("iter=%5d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f size= ---\n", 
+  printf ("iter=%4d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=---\n", 
   
            (int) iter,
            
@@ -179,7 +186,7 @@ simplex(
       * Delta2_best = gsl_vector_get (s->x, 2);
       * alpha1_best = gsl_vector_get (s->x, 3);
             
-      printf ("iter=%5d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f size=%.8f\n", 
+      printf ("iter=%4d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=%.8f\n", 
               (int) iter,
               * Gamma_best, 
               * Delta1_best,
@@ -231,7 +238,7 @@ residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J)
       Ji1 = ( dGin_doubleDelta_dDelta1(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
       Ji2 = ( dGin_doubleDelta_dDelta2(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
       Ji3 = ( dGin_doubleDelta_dalpha1(X[i], Gamma, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
-                  
+
       gsl_matrix_set (J, i, 0, Ji0); 
       gsl_matrix_set (J, i, 1, Ji1);
       gsl_matrix_set (J, i, 2, Ji2); 
@@ -261,8 +268,8 @@ residuals_fdf(const gsl_vector * params,
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF)
 {
-  printf ("iter=%3u Gamma=%.8f Delta1=%.8f Delta2=%.8f alpha1=%.8f"
-               " chi^2 = %.10f chi^2/DoF = %.10f\n",
+  printf ("iter=%4d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
+               " chi^2=%.10f chi^2/DoF=%.10f\n",
                
                (unsigned int) iter,
                
@@ -301,7 +308,7 @@ fit(struct data * d,
   const size_t p = 4;
   gsl_matrix *covar = gsl_matrix_alloc (p, p);
   gsl_multifit_function_fdf f;
-  double x_init[4]; /* initial guess for (Gamma, Delta) */
+  double x_init[4]; /* initial guess for (Gamma, Delta1, Delta2, alpha1) */
   gsl_vector_view x = gsl_vector_view_array (x_init, p);
   
   x_init[0] = Gamma_init;
@@ -335,7 +342,7 @@ fit(struct data * d,
      
       /* if (status) break; */
      
-      status = gsl_multifit_test_delta (s->dx, s->x, 0, 1e-6); 
+      status = gsl_multifit_test_delta (s->dx, s->x, 0, 1e-8); 
     }
   while (status == GSL_CONTINUE &&  iter < MAX_FIT_ITER);
   
@@ -387,3 +394,28 @@ fit(struct data * d,
         
   return GSL_SUCCESS;
 }
+
+int
+constraints
+(
+  double Gamma,
+  double Delta1,
+  double Delta2,
+  double alpha1
+)
+{
+  return (
+    Gamma   > CONSTRAINT_GAMMA_MIN  &&
+    Gamma   < CONSTRAINT_GAMMA_MAX  &&
+    
+    Delta1  > CONSTRAINT_DELTA1_MIN &&
+    Delta1  < CONSTRAINT_DELTA1_MAX &&
+
+    Delta2  > CONSTRAINT_DELTA2_MIN &&
+    Delta2  < CONSTRAINT_DELTA2_MAX &&
+
+    alpha1  > CONSTRAINT_ALPHA1_MIN &&
+    alpha1  < CONSTRAINT_ALPHA1_MAX 
+  );     
+}
+

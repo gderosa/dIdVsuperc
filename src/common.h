@@ -64,12 +64,22 @@
 #define   DSTEPSIZE                 2e-7  
 
 /* (chi squared) minimization algorithms */
-#define   MAX_SIMPLEX_ITER          200 /* Nelder-Mead */
-#define   MAX_FIT_ITER              200 /* Lenvenberg-Marquardt */
+#define   MAX_SIMPLEX_ITER          300 /* Nelder-Mead */
+#define   MAX_FIT_ITER              100 /* Lenvenberg-Marquardt */
+
+/* Constraints on parameters */
+#define    CONSTRAINT_GAMMA_MIN     0.00
+#define    CONSTRAINT_GAMMA_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA1_MIN     0.00
+#define   CONSTRAINT_DELTA1_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA2_MIN     0.00
+#define   CONSTRAINT_DELTA2_MAX     HUGE_VAL
+#define   CONSTRAINT_ALPHA1_MIN     0.66
+#define   CONSTRAINT_ALPHA1_MAX     1.00    
 
 /* Types */
 
-#define BOOL unsigned short int /* ANSI C89 / ISO C90 */
+#define BOOL unsigned short int /* ANSI C89 doesn't provide bool */
 
 struct Gin_integrand_params 
   {
@@ -269,4 +279,11 @@ plot(const double Gamma, const double Delta1, const double Delta2, const double 
  */
 
 
-
+int 
+constraints
+(
+  double Gamma,
+  double Delta1,
+  double Delta2,
+  double alpha1
+);
