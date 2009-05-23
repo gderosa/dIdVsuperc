@@ -138,6 +138,8 @@ simplex(
   int status;
   double size;
   
+  size_t DoF = d->n - 5;
+  
   /* Starting point */
   x = gsl_vector_alloc (5);  
   gsl_vector_set (x, 0, Gamma1_init);
@@ -163,7 +165,7 @@ simplex(
   s = gsl_multimin_fminimizer_alloc (T, 5);
   gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
   
-  printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=---\n", 
+  printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=---\n", 
   
            (int) iter,
            
@@ -173,7 +175,7 @@ simplex(
            gsl_vector_get (s->x, 3),            
            gsl_vector_get (s->x, 4),            
                       
-           squared_residuals (x, d)
+           squared_residuals (x, d) / DoF
          ); 
   do
     {
@@ -196,14 +198,14 @@ simplex(
       * Delta2_best = gsl_vector_get (s->x, 3);
       * alpha1_best = gsl_vector_get (s->x, 4);
             
-      printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=%.8f\n", 
+      printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=%.8f\n", 
               (int) iter,
               * Gamma1_best, 
               * Gamma2_best,
               * Delta1_best,
               * Delta2_best, 
               * alpha1_best,                              
-              s->fval, 
+              s->fval / DoF, 
               size
       );
     }
@@ -347,7 +349,7 @@ fit(struct data * d,
   
   gsl_multifit_fdfsolver_set (s, &f, &x.vector);  
   
-  print_fit_state (iter, s, n);
+  print_fit_state (iter, s, n-p); /* n-p = DoF */
   
   do
     {
