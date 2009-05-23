@@ -33,9 +33,13 @@ ui(void)
     line = (char *) malloc(BUFSIZ*sizeof(char));
     str  = (char *) malloc(BUFSIZ*sizeof(char));
     
-    printf("Initial value for Gamma                     [%g] ", Gamma0);
+    printf("Initial value for Gamma1                    [%g] ", Gamma1_0);
     fgets(line, n, stdin);
-    sscanf(line, "%lf", &Gamma0);
+    sscanf(line, "%lf", &Gamma1_0);
+
+    printf("Initial value for Gamma2                    [%g] ", Gamma2_0);
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Gamma2_0);
     
     printf("Initial value for Delta1                    [%g] ", Delta1_0);
     fgets(line, n, stdin);
@@ -45,7 +49,7 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Delta2_0);
  
-     printf("Initial value for alpha1                    [%g] ", alpha1_0);
+    printf("Initial value for alpha1                    [%g] ", alpha1_0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &alpha1_0);
     
@@ -57,13 +61,14 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%s", ExpDataFile);
 
-    printf("Fit interval: bias voltage lower limit(mV)  [unlimited] ");
-    fgets(line, n, stdin);
-    sscanf(line, "%lf", &Vi);
-
-    printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
-    fgets(line, n, stdin);
-    sscanf(line, "%lf", &Vf);
+    /* printf("Fit interval: bias voltage lower limit(mV)  [unlimited] ");
+     * fgets(line, n, stdin);
+     * sscanf(line, "%lf", &Vi);
+     *
+     * printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
+     * fgets(line, n, stdin);
+     * sscanf(line, "%lf", &Vf);
+     */
 
     return 0;
 }
