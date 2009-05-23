@@ -23,7 +23,8 @@ int
 init(void) 
   {
     T0          = T0_default;
-    Gamma0      = Gamma0_default;
+    Gamma1_0    = Gamma1_0_default;
+    Gamma2_0    = Gamma2_0_default;    
     Delta1_0    = Delta1_0_default;
     Delta2_0    = Delta2_0_default;
     alpha1_0    = alpha1_0_default;
