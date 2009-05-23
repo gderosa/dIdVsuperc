@@ -61,14 +61,13 @@ ui(void)
     fgets(line, n, stdin);
     sscanf(line, "%s", ExpDataFile);
 
-    /* printf("Fit interval: bias voltage lower limit(mV)  [unlimited] ");
-     * fgets(line, n, stdin);
-     * sscanf(line, "%lf", &Vi);
-     *
-     * printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
-     * fgets(line, n, stdin);
-     * sscanf(line, "%lf", &Vf);
-     */
+    printf("Fit interval: bias voltage lower limit(mV)  [unlimited] ");
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Vi);
+    
+    printf("Fit interval: bias voltage upper limit(mV)  [unlimited] ");
+    fgets(line, n, stdin);
+    sscanf(line, "%lf", &Vf);
 
     return 0;
 }
