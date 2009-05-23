@@ -70,7 +70,7 @@ main (void)
 
   double reduced_chi_square;
 
-  gsl_matrix * cov_Gamma_Delta1_Delta2_alpha1 = gsl_matrix_alloc(5,5);
+  gsl_matrix * cov_Gamma1_Gamma2_Delta1_Delta2_alpha1 = gsl_matrix_alloc(5,5);
   
   struct data d;
   

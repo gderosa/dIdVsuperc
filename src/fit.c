@@ -56,7 +56,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
         /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
       if (X[i]<Vi || X[i]>Vf) continue; 
       
-      theory = Gin_doubleDeltaGamma(X[i], Gamma, Delta1, Delta2, alpha1, T0);
+      theory = Gin_doubleDeltaGamma(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0);
       experiment = Y[i];
       residual = (theory - experiment)/sigmaY[i];
       if (!constraints(
@@ -184,7 +184,7 @@ simplex(
         break;
       
       size = gsl_multimin_fminimizer_size (s);
-      status = gsl_multimin_test_size (size, 1e-4);
+      status = gsl_multimin_test_size (size, MULTIMIN_TEST_SIZE);
       
       if (status == GSL_SUCCESS)
         {
@@ -196,7 +196,7 @@ simplex(
       * Delta2_best = gsl_vector_get (s->x, 3);
       * alpha1_best = gsl_vector_get (s->x, 4);
             
-      printf ("iter=%3d Gamma1=%+.8f Gamma1=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=%.8f\n", 
+      printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2=%011.8f simplex_size=%.8f\n", 
               (int) iter,
               * Gamma1_best, 
               * Gamma2_best,
@@ -282,7 +282,7 @@ residuals_fdf(const gsl_vector * params,
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF)
 {
-  printf ("iter=%4d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
+  printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
                " chi^2=%.10f chi^2/DoF=%.10f\n",
                
                (unsigned int) iter,
@@ -360,7 +360,7 @@ fit(struct data * d,
      
       /* if (status) break; */
      
-      status = gsl_multifit_test_delta (s->dx, s->x, 0, 1e-8); 
+      status = gsl_multifit_test_delta (s->dx, s->x, 0, MULTIFIT_TEST_DELTA); 
     }
   while (status == GSL_CONTINUE &&  iter < MAX_FIT_ITER);
   

@@ -59,9 +59,11 @@
 /* for num. differentiation */
 #define   DSTEPSIZE                 2e-7  
 
-/* (chi squared) minimization algorithms */
-#define   MAX_SIMPLEX_ITER          300 /* Nelder-Mead */
-#define   MAX_FIT_ITER              100 /* Lenvenberg-Marquardt */
+/* (chi squared) minimization algorithms                                      */
+#define   MAX_SIMPLEX_ITER          400   /* Nelder-Mead "Simplex"            */
+#define   MAX_FIT_ITER              100   /* Levenberg-Marquardt "downhill"   */
+#define   MULTIMIN_TEST_SIZE        1e-6  /* Nelder-Mead "Simplex"            */
+#define   MULTIFIT_TEST_DELTA       1e-6  /* Levenberg-Marquardt "downhill"   */
 
 /* Constraints on parameters */
 #define   CONSTRAINT_GAMMA1_MIN     0.00
