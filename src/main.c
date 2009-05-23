@@ -21,16 +21,25 @@
 
 /* used only in this file */
 int write_results(
-                  double Gamma_best_final,
-                  double sigma_Gamma,
+                  double Gamma1_best_final,                  
+                  double sigma_Gamma1,
+                  
+                  double Gamma2_best_final,                  
+                  double sigma_Gamma2,
+                  
                   double Delta1_best_final,
-                  double Delta2_best_final,
-                  double alpha1_best_final,
                   double sigma_Delta1,
+                                    
+                  double Delta2_best_final,
                   double sigma_Delta2,
+                                    
+                  double alpha1_best_final,
                   double sigma_alpha1,
+                  
                   double reduced_chi_squared,
-                  char * name);
+                  
+                  char * name
+);
 
 int 
 main (void) 
@@ -41,24 +50,27 @@ main (void)
   unsigned int i = 0;
   
   double 
-     Gamma_best_step1, 
+    Gamma1_best_step1,
+    Gamma2_best_step1,      
     Delta1_best_step1,
     Delta2_best_step1,
     alpha1_best_step1;
   double 
-     Gamma_best_step2, 
+     Gamma1_best_step2,
+     Gamma2_best_step2,       
      Delta1_best_step2,
      Delta2_best_step2,
      alpha1_best_step2;
   double 
-    sigma_Gamma, 
+    sigma_Gamma1, 
+    sigma_Gamma2,     
     sigma_Delta1,
     sigma_Delta2,
     sigma_alpha1;
 
   double reduced_chi_square;
 
-  gsl_matrix * cov_Gamma_Delta1_Delta2_alpha1 = gsl_matrix_alloc(4,4);
+  gsl_matrix * cov_Gamma_Delta1_Delta2_alpha1 = gsl_matrix_alloc(5,5);
   
   struct data d;
   
@@ -100,14 +112,16 @@ main (void)
   printf("\n PASS 1: Minimization with Nelder-Mead SIMPLEX algorithm:\n");
   
   simplex(
-      Gamma0, 
+    Gamma1_0,
+    Gamma2_0,      
     Delta1_0,
     Delta2_0,
     alpha1_0,
     
     &d, 
     
-     &Gamma_best_step1, 
+    &Gamma1_best_step1,
+    &Gamma2_best_step1,      
     &Delta1_best_step1,
     &Delta2_best_step1,
     &alpha1_best_step1
@@ -119,58 +133,73 @@ main (void)
   fit(
     &d, 
 
-     Gamma_best_step1, 
+    Gamma1_best_step1,
+    Gamma2_best_step1,      
     Delta1_best_step1, 
     Delta2_best_step1,
     alpha1_best_step1,
     
-     &Gamma_best_step2, 
+    &Gamma1_best_step2,
+    &Gamma2_best_step2,      
     &Delta1_best_step2, 
     &Delta2_best_step2,
     &alpha1_best_step2,
 
-    cov_Gamma_Delta1_Delta2_alpha1, 
+    cov_Gamma1_Gamma2_Delta1_Delta2_alpha1, 
     
     &reduced_chi_square
   );
 
-  sigma_Gamma  = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,0,0)) * 
+  sigma_Gamma1  = 
+	  sqrt(gsl_matrix_get(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1,0,0)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
+  sigma_Gamma2  = 
+	  sqrt(gsl_matrix_get(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1,1,1)) * 
+	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));	  
   sigma_Delta1 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,1,1)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1,2,2)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
   sigma_Delta2 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,2,2)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1,3,3)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
   sigma_alpha1 = 
-	  sqrt(gsl_matrix_get(cov_Gamma_Delta1_Delta2_alpha1,3,3)) * 
+	  sqrt(gsl_matrix_get(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1,4,4)) * 
 	  GSL_MAX_DBL(1,sqrt(reduced_chi_square));
 
-#define  Gamma_best_final  Gamma_best_step2  
+#define Gamma1_best_final Gamma1_best_step2
+#define Gamma2_best_final Gamma2_best_step2    
 #define Delta1_best_final Delta1_best_step2 
 #define Delta2_best_final Delta2_best_step2 
 #define alpha1_best_final alpha1_best_step2 
 
 /* #define COV gsl_matrix_get(cov_Gamma_Delta, 1, 0) */
-  /* DISABLED: there are 4*3/2 = 6 independent covariances now! */
+  /* DISABLED: there are 5*4/2 = 10 independent covariances now! */
   /* TODO: display properly covariances matrix ;-) */
 
   write_results(
-	  Gamma_best_final, 
-	  sigma_Gamma, 
+	  Gamma1_best_final, 
+	  sigma_Gamma1,
+	   
+	  Gamma2_best_final, 
+	  sigma_Gamma2, 
+	  
 	  Delta1_best_final, 
 	  sigma_Delta1,
+	  
 	  Delta2_best_final, 
 	  sigma_Delta2,
+	  
  	  alpha1_best_final, 
 	  sigma_alpha1,
+	  
 	  reduced_chi_square,
+	  
 	  ExpDataFile
   );
   
   plot(
-    Gamma_best_final, 
+    Gamma1_best_final,
+    Gamma2_best_final,      
     Delta1_best_final, 
     Delta2_best_final, 
     alpha1_best_final,  
@@ -185,15 +214,17 @@ main (void)
  *    }
  */
  
-  gsl_matrix_free(cov_Gamma_Delta1_Delta2_alpha1);
+  gsl_matrix_free(cov_Gamma1_Gamma2_Delta1_Delta2_alpha1);
  
   return 0;
 }
 
 
 int write_results(
-  double Gamma,
-  double sigma_Gamma,
+  double Gamma1,
+  double sigma_Gamma1,
+  double Gamma2,
+  double sigma_Gamma2,  
   double Delta1,
   double sigma_Delta1,
   double Delta2,
@@ -212,7 +243,8 @@ int write_results(
   
   f = fopen(str, "w");
   
-  fprintf(f, "Gamma     = %f +/- %f\n", Gamma,  sigma_Gamma );
+  fprintf(f, "Gamma1    = %f +/- %f\n", Gamma1, sigma_Gamma1);
+  fprintf(f, "Gamma2    = %f +/- %f\n", Gamma2, sigma_Gamma2);  
   fprintf(f, "Delta1    = %f +/- %f\n", Delta1, sigma_Delta1);
   fprintf(f, "Delta2    = %f +/- %f\n", Delta2, sigma_Delta2);
   fprintf(f, "alpha1    = %f +/- %f\n", alpha1, sigma_alpha1);
