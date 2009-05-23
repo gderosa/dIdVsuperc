@@ -36,10 +36,10 @@
 /* Constants and defaults */
 #define   DATADIR                   "data"
 #define   T0_default                4.2             /* Kelvin degrees */
-#define   Gamma1_0_default          0.7
-#define   Gamma2_0_default          0.7
-#define   Delta1_0_default          2.5
-#define   Delta2_0_default          6.9
+#define   Gamma1_0_default          0.2
+#define   Gamma2_0_default          0.2
+#define   Delta1_0_default          1.5
+#define   Delta2_0_default          4.0
 #define   alpha1_0_default          0.7             /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
@@ -62,7 +62,7 @@
 /* (chi squared) minimization algorithms                                      */
 #define   MAX_SIMPLEX_ITER          400   /* Nelder-Mead "Simplex"            */
 #define   MAX_FIT_ITER              100   /* Levenberg-Marquardt "downhill"   */
-#define   MULTIMIN_TEST_SIZE        1e-6  /* Nelder-Mead "Simplex"            */
+#define   MULTIMIN_TEST_SIZE        1e-5  /* Nelder-Mead "Simplex"            */
 #define   MULTIFIT_TEST_DELTA       1e-6  /* Levenberg-Marquardt "downhill"   */
 
 /* Constraints on parameters */
