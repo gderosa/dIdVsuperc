@@ -54,7 +54,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
     {
       /* fitting an interval only */ 
         /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
-      if (X[i]<Vi || X[i]>Vf) continue; 
+      /* if (X[i]<Vi || X[i]>Vf) continue; */ /* NO! take another aproach...*/
       
       theory = Gin_doubleDeltaGamma(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0);
       experiment = Y[i];
@@ -93,6 +93,26 @@ squared_residuals(const gsl_vector * params, void * data)
   
   return result; 
 }
+
+double 
+squared_residuals_partial(const gsl_vector * params, void * data)
+{
+  struct data * d = (struct data *) data;
+  size_t n      = d->n;
+  size_t n_eff  = d->n_eff;
+  gsl_vector * f = gsl_vector_alloc(n);
+  double result;
+  
+  residuals_vector_f_partial(params, data, f);
+  
+  result = gsl_pow_2(gsl_blas_dnrm2(f));
+  
+  gsl_vector_free(f);
+  
+  return result; 
+}
+
+
 
 double 
 squared_residuals_w_constraints(const gsl_vector * params, void * data)

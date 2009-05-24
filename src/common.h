@@ -107,11 +107,13 @@ struct Gin_squared_residuals_params
     double *X, *Y;
   };
 
-struct data { /* experimental points */
-  size_t n;
-  double * X;
-  double * Y;
-  double * sigmaY;
+struct data {   /* experimental points */
+  size_t  n;
+  size_t  n_eff;
+  BOOL    yes;  /* is it inside selected interval? */  
+  double  * X;
+  double  * Y;
+  double  * sigmaY;
 };
 
 
