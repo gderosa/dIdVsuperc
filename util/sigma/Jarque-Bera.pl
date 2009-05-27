@@ -4,6 +4,9 @@
 
 # Adapted from http://www.perlmonks.org/?node_id=612779 by Guido De Rosa
 
+# Takes experimental data file. Computes mean values, std deviations
+# and perform a Jarque-Bera test of gaussianity.
+
 # transforms "X Y1 Y2 Y3 ..."
 # into: "X Y_mean sigma_Y JB-test-result-on-Y-distrib"
 

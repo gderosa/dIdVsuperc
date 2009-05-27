@@ -60,7 +60,7 @@
 #define   DSTEPSIZE                 2e-7  
 
 /* (chi squared) minimization algorithms                                      */
-#define   MAX_SIMPLEX_ITER          400   /* Nelder-Mead "Simplex"            */
+#define   MAX_SIMPLEX_ITER          500   /* Nelder-Mead "Simplex"            */
 #define   MAX_FIT_ITER              100   /* Levenberg-Marquardt "downhill"   */
 #define   MULTIMIN_TEST_SIZE        2e-5  /* Nelder-Mead "Simplex"            */
 #define   MULTIFIT_TEST_DELTA       1e-7  /* Levenberg-Marquardt "downhill"   */
