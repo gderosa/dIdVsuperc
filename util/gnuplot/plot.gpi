@@ -20,7 +20,6 @@ outdir=root."/plots"
 
 # set xrange[-22:22]
 set yrange[0.1:1.4]
-
 set grid
 
 set xlabel "bias voltage (mV)"
@@ -29,18 +28,27 @@ set ylabel "dI/dV (normalized)"
 
 set terminal png size 2970,2100 font pngfont 40
 set output outdir."/".name.".big.png"
-plot datafile w err title datafilerelpath, fitfile w lines linewidth 4 title fitfilerelpath 
+plot datafile using 1:2:3 w err title datafilerelpath, fitfile w lines linewidth 4 title fitfilerelpath 
 
 set terminal png size 680,510 font pngfont 11.5
 set output outdir."/".name.".png"
-plot datafile w err title datafilerelpath, fitfile w lines linewidth 2.7 title fitfilerelpath 
+plot datafile using 1:2:3 w err title datafilerelpath, fitfile w lines linewidth 2.7 title fitfilerelpath 
 
 set terminal postscript size 25.000cm,17.678cm color solid landscape font 15
 set output outdir."/".name.".ps"
-plot datafile linewidth 0.1 w err title datafilerelpath, fitfile w lines linewidth 2.4 title fitfilerelpath
+plot datafile using 1:2:3 linewidth 0.1 w err title datafilerelpath, fitfile w lines linewidth 2.4 title fitfilerelpath
 
 set terminal postscript size 25.000cm,17.678cm color solid eps font 26
 set output outdir."/".name.".eps"
-plot datafile linewidth 0.1 w err title datafilerelpath, fitfile w lines linewidth 4.4 title fitfilerelpath
+plot datafile using 1:2:3 linewidth 0.1 w err title datafilerelpath, fitfile w lines linewidth 4.4 title fitfilerelpath
+
+
+set xrange[-25:25]
+set yrange[0:8] 
+set ylabel "J-B test"
+set terminal png size 560,420 font pngfont 12
+set output outdir."/".name.".JB.png"
+plot datafile using 1:4 title datafilerelpath."\n Jarque-Bera test \n (smaller values = more gaussianity)"  
+
 
 
