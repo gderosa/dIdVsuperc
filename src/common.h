@@ -46,6 +46,7 @@
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
 #define   Vi_default                -MY_HUGE_VAL
 #define   Vf_default                MY_HUGE_VAL
+#define   Mode_default              DoubleDelta
 
 #define   MaxExpPoints              4096
 
@@ -82,10 +83,11 @@
 #define   CONSTRAINT_ALPHA1_MIN     0.666
 #define   CONSTRAINT_ALPHA1_MAX     1.0001    
 
-
 /* Types */
 
 #define BOOL unsigned short int /* ANSI C89 doesn't provide bool */
+
+typedef enum {SingleGap, DoubleDelta, DoubleDeltaGamma} Modes;
 
 struct Gin_integrand_params 
   {
@@ -126,7 +128,7 @@ extern double
   k_B, 
   Vi, Vf;
 extern char ExpDataFile[BUFSIZ];
-
+extern Modes Mode;
 #endif
 
 /* Functions */
@@ -312,3 +314,11 @@ constraints
   double Delta2,
   double alpha1
 );
+
+const char *
+BOOL2yn(BOOL b);
+
+BOOL
+yn2BOOL(char * str, BOOL _default_);
+
+
