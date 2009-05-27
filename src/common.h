@@ -48,6 +48,8 @@
 
 #define   MaxExpPoints              4096
 
+#define   NPARAMS                   5               /* number of free parameters: Gamma1,2 Delta1,2 alpha1*/
+
 /* Plotting */
 #define   ExtraPlotRatio            0.05 /* plot fit function slightly larger */
 
@@ -110,7 +112,7 @@ struct Gin_squared_residuals_params
 struct data {   /* experimental points */
   size_t  n;
   size_t  n_eff;
-  BOOL    yes;  /* is it inside selected interval? */  
+  BOOL    * yes;  /* is it inside selected interval? */  
   double  * X;
   double  * Y;
   double  * sigmaY;
@@ -243,10 +245,10 @@ int
 residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f);
 
 double 
-squared_residuals(const gsl_vector * params, void * data);
+squared_residuals(const gsl_vector * params, void * data, double * result, double * result_partial);
 
 double 
-squared_residuals_w_constraints(const gsl_vector * params, void * data);
+squared_residuals_w_constraints(const gsl_vector * params, void * data, double * result, double * result_partial);
 
 int
 simplex(

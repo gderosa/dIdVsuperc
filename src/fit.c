@@ -76,46 +76,44 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
  * before being minimized by a derivatives-based nonlinear fit (which, most importantly,
  * estimates statistical errors on best-fit parameters)
  */
-double 
-squared_residuals(const gsl_vector * params, void * data)
+double
+squared_residuals(
+  const gsl_vector * params, 
+  void * data, 
+  double * result, 
+  double * result_partial
+)
 {
-  struct data * d = (struct data *) data;
-  size_t n = d->n;
-  gsl_vector * f = gsl_vector_alloc(n);
-  /* int status = residuals_vector_f(params, data, f); */
-  double result;
-  
+  unsigned int  i         = 0;
+  struct data * d         = (struct data *) data;
+  gsl_vector  * f         = gsl_vector_alloc(d->n);
+  gsl_vector  * f_partial = gsl_vector_alloc(d->n);
+
   residuals_vector_f(params, data, f);
   
-  result = gsl_pow_2(gsl_blas_dnrm2(f));
+  for (i = 0; i < d->n; i++) 
+    {
+      if (d->X[i]>Vi && d->X[i]<Vf)
+        {
+          gsl_vector_set(f_partial, i, gsl_vector_get(f, i));
+        }
+      else
+        {
+          gsl_vector_set(f_partial, i, 0);
+        }
+    }
+  
+  *result         = gsl_pow_2(gsl_blas_dnrm2(f));
+  *result_partial = gsl_pow_2(gsl_blas_dnrm2(f_partial));
   
   gsl_vector_free(f);
-  
-  return result; 
+  gsl_vector_free(f_partial);
+    
+  return *result_partial; 
 }
 
-double 
-squared_residuals_partial(const gsl_vector * params, void * data)
-{
-  struct data * d = (struct data *) data;
-  size_t n      = d->n;
-  size_t n_eff  = d->n_eff;
-  gsl_vector * f = gsl_vector_alloc(n);
-  double result;
-  
-  residuals_vector_f_partial(params, data, f);
-  
-  result = gsl_pow_2(gsl_blas_dnrm2(f));
-  
-  gsl_vector_free(f);
-  
-  return result; 
-}
-
-
-
-double 
-squared_residuals_w_constraints(const gsl_vector * params, void * data)
+double
+squared_residuals_w_constraints(const gsl_vector * params, void * data, double * result, double * result_partial)
 {
   double Gamma1 = gsl_vector_get (params, 0);
   double Gamma2 = gsl_vector_get (params, 1);  
@@ -129,9 +127,17 @@ squared_residuals_w_constraints(const gsl_vector * params, void * data)
     Delta1,
     Delta2,
     alpha1
-  )) return HUGE_VAL;
-  
-  return squared_residuals(params, data);
+  ))
+    {
+      * result          = HUGE_VAL;
+      * result_partial  = HUGE_VAL;
+    } 
+  else
+    {
+      squared_residuals(params, data, result, result_partial);    
+    }
+    
+  return * result_partial;
 }
 
 int

@@ -95,12 +95,26 @@ main (void)
       fprintf(stderr,"Couldn't open %s!\n", ExpDataFile);
       return 127;
     }  
+    
+  d.n_eff = 0;
+  d.yes   = malloc(MaxExpPoints*sizeof(BOOL));
+    
   while (fgets(line, sizeof line, f)) 
     {
       ExpDataX[i]       = strtod(strtok(line," \t\n\r"),NULL);
       ExpDataY[i]       = strtod(strtok(NULL," \t\n\r"),NULL);      
       ExpDataSigmaY[i]  = strtod(strtok(NULL," \t\n\r"),NULL);      
       i++;
+      /* fit only in a selected interval [Vi,Vf] */
+      if (ExpDataX[i]>=Vi && ExpDataX[i]<=Vf) 
+        {
+          d.n_eff++;
+          d.yes[i] = 1;
+        }
+      else
+        {
+          d.yes[i] = 0;
+        }
     }          
   ExpPoints = i;    
 
@@ -108,7 +122,7 @@ main (void)
   d.X       = ExpDataX;
   d.Y       = ExpDataY;
   d.sigmaY  = ExpDataSigmaY;
-  
+    
   printf("\n PASS 1: Minimization with Nelder-Mead SIMPLEX algorithm:\n");
   
   simplex(
