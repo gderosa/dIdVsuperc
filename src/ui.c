@@ -32,6 +32,14 @@ ui(void)
     /* Keep It Simple, Stupid ;-) */
     line = (char *) malloc(BUFSIZ*sizeof(char));
     str  = (char *) malloc(BUFSIZ*sizeof(char));
+
+    printf("Mode?\n"
+           "  0 = single gap \n"
+           "  1 = double Delta \n"
+           "  2 = double Delta and double Gamma \n"
+           "                                            [%d] ", Mode);
+    fgets(line, n, stdin);
+    sscanf(line, "%d", &Mode);
     
     printf("Initial value for Gamma1                    [%g] ", Gamma1_0);
     fgets(line, n, stdin);

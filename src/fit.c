@@ -417,31 +417,4 @@ fit(struct data * d,
   return GSL_SUCCESS;
 }
 
-int
-constraints
-(
-  double Gamma1,
-  double Gamma2,  
-  double Delta1,
-  double Delta2,
-  double alpha1
-)
-{
-  return (
-    Gamma1  > CONSTRAINT_GAMMA1_MIN &&
-    Gamma1  < CONSTRAINT_GAMMA1_MAX &&
-
-    Gamma2  > CONSTRAINT_GAMMA1_MIN &&
-    Gamma2  < CONSTRAINT_GAMMA1_MAX &&
-
-    Delta1  > CONSTRAINT_DELTA1_MIN &&
-    Delta1  < CONSTRAINT_DELTA1_MAX &&
-
-    Delta2  > CONSTRAINT_DELTA2_MIN &&
-    Delta2  < CONSTRAINT_DELTA2_MAX &&
-
-    alpha1  > CONSTRAINT_ALPHA1_MIN &&
-    alpha1  < CONSTRAINT_ALPHA1_MAX 
-  );     
-}
 

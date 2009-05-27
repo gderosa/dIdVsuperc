@@ -46,7 +46,7 @@
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
 #define   Vi_default                -MY_HUGE_VAL
 #define   Vf_default                MY_HUGE_VAL
-#define   Mode_default              DoubleDelta
+#define   Mode_default              1               /* two Deltas, one Gamma */
 
 #define   MaxExpPoints              4096
 
@@ -128,7 +128,7 @@ extern double
   k_B, 
   Vi, Vf;
 extern char ExpDataFile[BUFSIZ];
-extern Modes Mode;
+int Mode; /* 0=single gap, 1=double Delta, 2=double Delta and Gamma */
 #endif
 
 /* Functions */

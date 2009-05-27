@@ -15,6 +15,7 @@ link_libraries(${LIBS})
 add_executable(
 	dIdVsuperc 
 		src/common.h 
+		src/constraints.c
 		src/fit.c 
 		src/functions.c 
 		src/globals.c 
