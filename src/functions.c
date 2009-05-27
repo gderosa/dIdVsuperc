@@ -112,7 +112,22 @@ Gin_doubleDeltaGamma(
   const double alpha1,
   const double T)
 {
-  return alpha1*Gin(V, Gamma1, Delta1, T) + (1-alpha1)*Gin(V, Gamma2, Delta2, T);
+  if (Mode==0)
+    return 
+      Gin(V, Gamma1, Delta1, T) 
+    ;
+  if (Mode==1)
+    return 
+      alpha1*Gin(V, Gamma1, Delta1, T) 
+      + 
+      (1-alpha1)*Gin(V, Gamma1, Delta2, T)
+    ;
+  if (Mode==2)
+    return 
+      alpha1*Gin(V, Gamma1, Delta1, T) 
+      + 
+      (1-alpha1)*Gin(V, Gamma2, Delta2, T)
+    ;
 }
 
 /* Gin as a function of Gamma1; Gamma2, V, Delta1, Delta2, alpha1, T as parametrs */

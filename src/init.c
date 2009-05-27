@@ -29,9 +29,10 @@ init(void)
     Delta2_0    = Delta2_0_default;
     alpha1_0    = alpha1_0_default;
     k_B         = k_B_default;
-    Vi		= Vi_default;
-    Vf		= Vf_default;
+    Vi      		= Vi_default;
+    Vf		      = Vf_default;
     strcpy(ExpDataFile, ExpDataFile_default);
+    Mode        = Mode_default;
     
     return 0;
   }

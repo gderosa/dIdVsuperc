@@ -32,27 +32,47 @@ ui(void)
     /* Keep It Simple, Stupid ;-) */
     line = (char *) malloc(BUFSIZ*sizeof(char));
     str  = (char *) malloc(BUFSIZ*sizeof(char));
+
+    printf("Mode?\n"
+           "  0 = single gap \n"
+           "  1 = double Delta \n"
+           "  2 = double Delta and double Gamma \n"
+           "                                            [%d] ", Mode);
+    fgets(line, n, stdin);
+    sscanf(line, "%d", &Mode);
     
-    printf("Initial value for Gamma1                    [%g] ", Gamma1_0);
+    if (Mode!=2)
+      printf("Initial value for Gamma                     [%g] ", Gamma1_0);
+    else
+      printf("Initial value for Gamma1                    [%g] ", Gamma1_0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Gamma1_0);
 
-    printf("Initial value for Gamma2                    [%g] ", Gamma2_0);
-    fgets(line, n, stdin);
-    sscanf(line, "%lf", &Gamma2_0);
+    if (Mode==2)
+      {
+        printf("Initial value for Gamma2                    [%g] ", Gamma2_0);
+        fgets(line, n, stdin);
+        sscanf(line, "%lf", &Gamma2_0);
+      }
     
-    printf("Initial value for Delta1                    [%g] ", Delta1_0);
+    if (Mode==0)
+      printf("Initial value for Delta                     [%g] ", Delta1_0);
+    else
+      printf("Initial value for Delta1                    [%g] ", Delta1_0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &Delta1_0);
 
-    printf("Initial value for Delta2                    [%g] ", Delta2_0);
-    fgets(line, n, stdin);
-    sscanf(line, "%lf", &Delta2_0);
+    if (Mode!=0)
+      {
+        printf("Initial value for Delta2                    [%g] ", Delta2_0);
+        fgets(line, n, stdin);
+        sscanf(line, "%lf", &Delta2_0);
  
-    printf("Initial value for alpha1                    [%g] ", alpha1_0);
-    fgets(line, n, stdin);
-    sscanf(line, "%lf", &alpha1_0);
-    
+        printf("Initial value for alpha1                    [%g] ", alpha1_0);
+        fgets(line, n, stdin);
+        sscanf(line, "%lf", &alpha1_0);
+      }
+
     printf("Absolute temperature                        [%g] ", T0);
     fgets(line, n, stdin);
     sscanf(line, "%lf", &T0);
