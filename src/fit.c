@@ -53,7 +53,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
   for (i = 0; i < n; i++)
     {
       /* fitting an interval only */ 
-        /* might be Vi=-HUGE_VAL and/or Vf=HUGE_VAL for "unlimited" */
+        /* might be Vi=-MY_HUGE_VAL and/or Vf=MY_HUGE_VAL for "unlimited" */
       if (X[i]<Vi || X[i]>Vf) continue; 
       
       theory = Gin_doubleDeltaGamma(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0);
@@ -65,7 +65,7 @@ residuals_vector_f(const gsl_vector * params, void * data, gsl_vector * f)
         Delta1,
         Delta2,
         alpha1
-      )) residual = residual * HUGE_VAL; 
+      )) residual = residual * MY_HUGE_VAL; 
 
       gsl_vector_set (f, i, residual);
     }  
@@ -109,7 +109,7 @@ squared_residuals_w_constraints(const gsl_vector * params, void * data)
     Delta1,
     Delta2,
     alpha1
-  )) return HUGE_VAL;
+  )) return MY_HUGE_VAL;
   
   return squared_residuals(params, data);
 }

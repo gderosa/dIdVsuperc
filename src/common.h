@@ -34,6 +34,7 @@
 #include <gsl/gsl_multifit_nlin.h>
 
 /* Constants and defaults */
+#define   MY_HUGE_VAL               1e5             /* A finite value...! */
 #define   DATADIR                   "data"
 #define   T0_default                4.200           /* Kelvin degrees */
 #define   Gamma1_0_default          0.200
@@ -43,8 +44,8 @@
 #define   alpha1_0_default          0.667           /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
-#define   Vi_default                -HUGE_VAL
-#define   Vf_default                HUGE_VAL
+#define   Vi_default                -MY_HUGE_VAL
+#define   Vf_default                MY_HUGE_VAL
 
 #define   MaxExpPoints              4096
 
@@ -67,19 +68,19 @@
 
 /* Constraints on parameters */
 #define   CONSTRAINT_GAMMA1_MIN     0.000
-#define   CONSTRAINT_GAMMA1_MAX     HUGE_VAL
+#define   CONSTRAINT_GAMMA1_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_GAMMA2_MIN     0.000
-#define   CONSTRAINT_GAMMA2_MAX     HUGE_VAL
+#define   CONSTRAINT_GAMMA2_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_DELTA1_MIN     0.000
-#define   CONSTRAINT_DELTA1_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA1_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_DELTA2_MIN     0.000
-#define   CONSTRAINT_DELTA2_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA2_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_ALPHA1_MIN     0.666
-#define   CONSTRAINT_ALPHA1_MAX     1.000    
+#define   CONSTRAINT_ALPHA1_MAX     1.0001    
 
 
 /* Types */

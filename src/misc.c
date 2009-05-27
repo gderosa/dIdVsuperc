@@ -31,7 +31,7 @@ cpow_2(const gsl_complex z)
 
 double array_min(double *ary, size_t n) 
 {
-  double min = HUGE_VAL;
+  double min = MY_HUGE_VAL;
   size_t i;
 
   for (i=0;i<n;i++)
@@ -45,7 +45,7 @@ double array_min(double *ary, size_t n)
 
 double array_max(double *ary, size_t n) 
 {
-  double max = -HUGE_VAL;
+  double max = -MY_HUGE_VAL;
   size_t i;
 
   for (i=0;i<n;i++)
