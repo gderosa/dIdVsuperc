@@ -137,8 +137,11 @@ simplex(
   size_t iter = 0;
   int status;
   double size;
+  size_t DoF;
   
-  size_t DoF = d->n - 5;
+  if (Mode==0) DoF = d->n - 2; /* 2 = Gamma, Delta */
+  if (Mode==1) DoF = d->n - 4; /* 4 = Gamma, Delta1, Delta2, alpha1 */
+  if (Mode==2) DoF = d->n - 5; /* 5 = Gamma1, Gamma2, Delta1, Delta2, alpha1 */
   
   /* Starting point */
   x = gsl_vector_alloc (5);  
@@ -165,18 +168,45 @@ simplex(
   s = gsl_multimin_fminimizer_alloc (T, 5);
   gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
   
-  printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=---\n", 
+  if (Mode==0) printf (
+    "iter=%3d Gamma=%+.8f Delta=%+.8f chi^2/DoF=%011.8f simplex_size=---\n", 
   
-           (int) iter,
+    (int) iter,
            
-           gsl_vector_get (s->x, 0), 
-           gsl_vector_get (s->x, 1), 
-           gsl_vector_get (s->x, 2), 
-           gsl_vector_get (s->x, 3),            
-           gsl_vector_get (s->x, 4),            
+    gsl_vector_get (s->x, 0), /* Gamma */
+    gsl_vector_get (s->x, 2), /* Delta */
                       
-           squared_residuals (x, d) / DoF
-         ); 
+    squared_residuals (x, d) / DoF
+  );
+
+  if (Mode==1) printf (
+    "iter=%3d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=---\n", 
+  
+    (int) iter,
+           
+    gsl_vector_get (s->x, 0), /* Gamma */
+    gsl_vector_get (s->x, 2), /* Delta1 */
+    gsl_vector_get (s->x, 3), /* Delta2 */           
+    gsl_vector_get (s->x, 4), /* alpha1 */           
+                      
+    squared_residuals (x, d) / DoF
+  );
+
+  if (Mode==2) printf (
+    "iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=---\n", 
+  
+    (int) iter,
+           
+    gsl_vector_get (s->x, 0), /* Gamma1 */
+    gsl_vector_get (s->x, 1), /* Gamma2 */
+    gsl_vector_get (s->x, 2), /* Delta1 */
+    gsl_vector_get (s->x, 3), /* Delta2 */           
+    gsl_vector_get (s->x, 4), /* alpha1 */           
+                      
+    squared_residuals (x, d) / DoF
+  );
+
+
   do
     {
       iter++;
@@ -198,16 +228,38 @@ simplex(
       * Delta2_best = gsl_vector_get (s->x, 3);
       * alpha1_best = gsl_vector_get (s->x, 4);
             
-      printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=%.8f\n", 
-              (int) iter,
-              * Gamma1_best, 
-              * Gamma2_best,
-              * Delta1_best,
-              * Delta2_best, 
-              * alpha1_best,                              
-              s->fval / DoF, 
-              size
+      if (Mode==0) printf (
+        "iter=%3d Gamma=%+.8f Delta=%+.8f chi^2/DoF=%011.8f simplex_size=%.8f\n", 
+        (int) iter,
+        * Gamma1_best, 
+        * Delta1_best,
+        s->fval / DoF, 
+        size
       );
+
+      if (Mode==1) printf (
+        "iter=%3d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=%.8f\n", 
+        (int) iter,
+        * Gamma1_best, 
+        * Delta1_best,
+        * Delta2_best, 
+        * alpha1_best,                              
+        s->fval / DoF, 
+        size
+      );
+
+      if (Mode==2) printf (
+        "iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f chi^2/DoF=%011.8f simplex_size=%.8f\n", 
+        (int) iter,
+        * Gamma1_best, 
+        * Gamma2_best,
+        * Delta1_best,
+        * Delta2_best, 
+        * alpha1_best,                              
+        s->fval / DoF, 
+        size
+      );
+
     }
   while (status == GSL_CONTINUE && iter < MAX_SIMPLEX_ITER);
   
@@ -240,7 +292,7 @@ residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J)
       
   size_t i;
   
-  double Ji0, Ji1, Ji2, Ji3, Ji4;
+  double Ji0=0, Ji1=0, Ji2=0, Ji3=0, Ji4=0;
   
   for (i = 0; i < n; i++)
     {
@@ -249,10 +301,13 @@ residuals_jacobian_df(const gsl_vector * params, void * data, gsl_matrix * J)
       /* and paramsj = Gamma, Delta */
       
       Ji0 = ( dGin_doubleDeltaGamma_dGamma1(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
-      Ji1 = ( dGin_doubleDeltaGamma_dGamma2(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];      
+      if (Mode==2) 
+        Ji1 = ( dGin_doubleDeltaGamma_dGamma2(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];      
       Ji2 = ( dGin_doubleDeltaGamma_dDelta1(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
-      Ji3 = ( dGin_doubleDeltaGamma_dDelta2(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
-      Ji4 = ( dGin_doubleDeltaGamma_dalpha1(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+      if (Mode!=0)
+        Ji3 = ( dGin_doubleDeltaGamma_dDelta2(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
+      if (Mode!=0)
+        Ji4 = ( dGin_doubleDeltaGamma_dalpha1(X[i], Gamma1, Gamma2, Delta1, Delta2, alpha1, T0) - Y[i] ) / sigmaY[i];
 
       gsl_matrix_set (J, i, 0, Ji0); 
       gsl_matrix_set (J, i, 1, Ji1);
@@ -284,20 +339,49 @@ residuals_fdf(const gsl_vector * params,
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s, size_t DoF)
 {
-  printf ("iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
-               " chi^2=%.10f chi^2/DoF=%.10f\n",
+  if (Mode==0) printf (
+    "iter=%3d Gamma=%+.8f Delta=%+.8f"
+    " chi^2=%.10f chi^2/DoF=%.10f\n",
                
-               (unsigned int) iter,
+    (unsigned int) iter,
                
-               gsl_vector_get(s->x, 0), 
-               gsl_vector_get(s->x, 1),
-               gsl_vector_get(s->x, 2), 
-               gsl_vector_get(s->x, 3),               
-               gsl_vector_get(s->x, 4),               
+    gsl_vector_get(s->x, 0), /* Gamma */ 
+    gsl_vector_get(s->x, 2), /* Delta */
                               
-               gsl_pow_2(gsl_blas_dnrm2(s->f)),
-               gsl_pow_2(gsl_blas_dnrm2(s->f))/DoF
-          );
+    gsl_pow_2(gsl_blas_dnrm2(s->f)),
+    gsl_pow_2(gsl_blas_dnrm2(s->f))/DoF
+  );
+
+  if (Mode==1) printf (
+    "iter=%3d Gamma=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
+    " chi^2=%.10f chi^2/DoF=%.10f\n",
+               
+    (unsigned int) iter,
+               
+    gsl_vector_get(s->x, 0), /* Gamma  */
+    gsl_vector_get(s->x, 2), /* Delta1 */
+    gsl_vector_get(s->x, 3), /* Delta2 */              
+    gsl_vector_get(s->x, 4), /* alpha1 */              
+                              
+    gsl_pow_2(gsl_blas_dnrm2(s->f)),
+    gsl_pow_2(gsl_blas_dnrm2(s->f))/DoF
+  );
+
+  if (Mode==2) printf (
+    "iter=%3d Gamma1=%+.8f Gamma2=%+.8f Delta1=%+.8f Delta2=%+.8f alpha1=%+.8f"
+    " chi^2=%.10f chi^2/DoF=%.10f\n",
+               
+    (unsigned int) iter,
+               
+    gsl_vector_get(s->x, 0), /* Gamma1 */
+    gsl_vector_get(s->x, 1), /* Gamma2 */
+    gsl_vector_get(s->x, 2), /* Delta1 */
+    gsl_vector_get(s->x, 3), /* Delta2 */              
+    gsl_vector_get(s->x, 4), /* alpha1 */              
+                              
+    gsl_pow_2(gsl_blas_dnrm2(s->f)),
+    gsl_pow_2(gsl_blas_dnrm2(s->f))/DoF
+  );
 }
 
 int 
@@ -325,10 +409,15 @@ fit(struct data * d,
   unsigned int iter = 0;
   const size_t n = d->n;
   const size_t p = 5;
+        size_t p_eff; /* no. of *actual* params */
   gsl_matrix *covar = gsl_matrix_alloc (p, p);
   gsl_multifit_function_fdf f;
   double x_init[5]; /* initial guess for (Gamma1, Gamma2, Delta1, Delta2, alpha1) */
   gsl_vector_view x = gsl_vector_view_array (x_init, p);
+
+  if (Mode==0) p_eff = 2;
+  if (Mode==1) p_eff = 4;
+  if (Mode==2) p_eff = 5;
   
   x_init[0] = Gamma1_init;
   x_init[1] = Gamma2_init;  
@@ -372,22 +461,14 @@ fit(struct data * d,
   
 #define FIT(i) gsl_vector_get(s->x, i)
 #define ERR(i) sqrt(gsl_matrix_get(covar,i,i))  
-/* now parameters are 5, not just 2...
- *
- * #define COV    gsl_matrix_get(covar,0,1)
- * #define COV1   gsl_matrix_get(covar,1,0)
- *
- * assert(COV==COV1);
- */
   
     { 
       double chi = gsl_blas_dnrm2(s->f);
-      double dof = n - p;
+      double dof = n - p_eff;
       double c = GSL_MAX_DBL(1, chi / sqrt(dof)); 
       
       printf("\n\n  ***** FINAL RESULTS: *****   \n");
       
-
       *reduced_chi_square = pow(chi, 2.0) / dof;
 
       printf("chi^2/DoF = %g\n", *reduced_chi_square);
@@ -398,16 +479,27 @@ fit(struct data * d,
       *Delta2_best = FIT(3);
       *alpha1_best = FIT(4);
                   
-      printf ("Gamma1 = %.5f +/- %.5f\n", *Gamma1_best, c*ERR(0));
-      printf ("Gamma2 = %.5f +/- %.5f\n", *Gamma2_best, c*ERR(1));      
-      printf ("Delta1 = %.5f +/- %.5f\n", *Delta1_best, c*ERR(2));
-      printf ("Delta2 = %.5f +/- %.5f\n", *Delta2_best, c*ERR(3));
-      printf ("alpha1 = %.5f +/- %.5f\n", *alpha1_best, c*ERR(4));            
-      /* printf ("cov(Gamma, Delta) = %.8f\n", COV); */ 
-        /* now there are actually 5*4/2 = 10 independent covariances! */
+      if (Mode==2) 
+        {
+          printf ("Gamma1 = %.5f +/- %.5f\n", *Gamma1_best, c*ERR(0));
+          printf ("Gamma2 = %.5f +/- %.5f\n", *Gamma2_best, c*ERR(1));      
+        }
+      else
+        {
+          printf ("Gamma  = %.5f +/- %.5f\n", *Gamma1_best, c*ERR(0));
+        }
+      
+      if (Mode==0)
+        {
+          printf ("Delta  = %.5f +/- %.5f\n", *Delta1_best, c*ERR(2));
+        }
+      else
+        {
+          printf ("Delta1 = %.5f +/- %.5f\n", *Delta1_best, c*ERR(2));
+          printf ("Delta2 = %.5f +/- %.5f\n", *Delta2_best, c*ERR(3));
+          printf ("alpha1 = %.5f +/- %.5f\n", *alpha1_best, c*ERR(4));
+        }
     }
-  
-  /* printf ("status = %s\n", gsl_strerror (status)); */
   
   printf("\n");
   
