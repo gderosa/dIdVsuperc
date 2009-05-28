@@ -58,4 +58,28 @@ To build graphical plots (requires Perl and Gnuplot)
 
 Enjoy!
 
-TODO: add instructions for a Microsoft Windows build/port
+=======================================================================
+
+INSTRUCTIONS FOR WINDOWS BUILD (recommended way)
+
+* Install MinGW (C compiler, make, binutils for Windows), the .exe file here:
+  http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=240780
+  * when asked, download&install gcc, make, binutils
+
+* Install CMake (binary for Windows, installer)
+  http://www.cmake.org/cmake/resources/software.html
+
+* Install the GSL for Windows, for example from:
+http://www.studenti.unina.it/~gcderosa/gsl-win32/1.12+git/gsl-1.12+git-win32.zip  * extract the "GSL" directory and put it into C:\
+
+* Run the CMake GUI (Start Menu, Program Files,  etc.)
+  * you have to set GSL_HOME = C:\GSL
+  * press "Configure" and "Generate" button
+  * choose to generate "MinGW Makefiles"
+
+* Open a Command Prompt and cd into the directory of this README file :-)
+  * run "make" (the MinGW make should be in your PATH ... )
+
+* dIdVsuperc.exe is ready now!
+  * Don't forget to copy the DLLs from C:\GSL\bin !
+
