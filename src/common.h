@@ -87,8 +87,6 @@
 
 #define BOOL unsigned short int /* ANSI C89 doesn't provide bool */
 
-typedef enum {SingleGap, DoubleDelta, DoubleDeltaGamma} Modes;
-
 struct Gin_integrand_params 
   {
     double V, Gamma, Delta, T;
