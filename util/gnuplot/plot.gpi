@@ -1,30 +1,9 @@
-#!/usr/bin/gnuplot
-
-#name="MgB2_01"
-
-root=cwd."/../.."
-
-pngfont=root."/share/fonts/truetype/freefont/FreeSans.ttf"
-
-datafilename=name.".dat"
-fitfilename=name.".dat.fit"
-
-datafilerelpath="data/".datafilename
-fitfilerelpath="data/".fitfilename
-
-datafile=root."/".datafilerelpath
-fitfile=root."/".fitfilerelpath
-
-outdir=root."/plots"
-
-
 # set xrange[-22:22]
 set yrange[0.1:1.4]
 set grid
 
 set xlabel "bias voltage (mV)"
 set ylabel "dI/dV (normalized)" 
-
 
 set terminal png size 2970,2100 font pngfont 40
 set output outdir."/".name.".big.png"
@@ -43,12 +22,6 @@ set output outdir."/".name.".eps"
 plot datafile using 1:2:3 linewidth 0.1 w err title datafilerelpath, fitfile w lines linewidth 4.4 title fitfilerelpath
 
 
-set xrange[-25:25]
-set yrange[0:8] 
-set ylabel "J-B test"
-set terminal png size 560,420 font pngfont 12
-set output outdir."/".name.".JB.png"
-plot datafile using 1:4 title datafilerelpath."\n Jarque-Bera test \n (smaller values = more gaussianity)"  
 
 
 
