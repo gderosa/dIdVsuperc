@@ -41,11 +41,12 @@ Marco Salluzzo, and to my fellow students Graziano Incalza and Tiziana Spina.
 HOWTO install/build
 
 You will need (on Unix):
-* a C compiler
+* a C compiler        (tipically GCC, and make and binutils)
 * CMake               http://www.cmake.org/
 * GSL                 http://www.gnu.org/software/gsl/
 * Make
 * Perl (optional)     http://www.perl.org/
+  * Perl Data Language  http://pdl.perl.org/ (for utils/sigma/Jarque-Bera.pl)
 * Gnuplot (optional)  http://www.gnuplot.info/
 
 Simply type:
