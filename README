@@ -1,12 +1,9 @@
 dIdVsuperc-doubleDelta 
 Copyright 2008, 2009 Guido De Rosa <guidoderosa@gmail.com>
 
-Fork of dIdVsuperc (hg repository at http://bitbucket.org/gderosa/didvsuperc/).
+Differential tunneling conductance of superconductors.
 
-This fork takes into account the double-gap superconducting feature of 
-MgB2 (magnesium diboride) and - presumably - other materials. 
-
-See, for example: 
+Double-gab feature of MgB2 is supported. See, for example: 
 
 F.Giubileo et al, "Strong coupling and double-gap density of 
 states in superconducting MgB2", Europhys. Lett., 58 (5), pp. 764-770 (2002).
@@ -38,9 +35,9 @@ Marco Salluzzo, and to my fellow students Graziano Incalza and Tiziana Spina.
 
 =======================================================================
 
-HOWTO install/build
+HOWTO install/build on Unix
 
-You will need (on Unix):
+You will need :
 * a C compiler        (tipically GCC, and make and binutils)
 * CMake               http://www.cmake.org/
 * GSL                 http://www.gnu.org/software/gsl/
@@ -61,7 +58,7 @@ Enjoy!
 
 =======================================================================
 
-INSTRUCTIONS FOR WINDOWS BUILD (recommended way)
+HOWTO install/build on Windows (recommended way)
 
 * Install MinGW (C compiler, make, binutils for Windows), the .exe file here:
   http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=240780
