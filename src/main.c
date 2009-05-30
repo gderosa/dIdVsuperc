@@ -247,12 +247,11 @@ int write_results(
 
   f = fopen(str, "w");
   
-  fprintf(f, "Gamma1    = %f +/- %f\n", Gamma1, sigma_Gamma1);
-  fprintf(f, "Gamma2    = %f +/- %f\n", Gamma2, sigma_Gamma2);  
-  fprintf(f, "Delta1    = %f +/- %f\n", Delta1, sigma_Delta1);
-  fprintf(f, "Delta2    = %f +/- %f\n", Delta2, sigma_Delta2);
-  fprintf(f, "alpha1    = %f +/- %f\n", alpha1, sigma_alpha1);
-  fprintf(f, "\n"                                           );
+  fprintf(f, "Gamma1    = %f +/- %f\n", Gamma1,             sigma_Gamma1);
+  fprintf(f, "Gamma2    = %f +/- %f\n", Gamma2 * (Mode==2), sigma_Gamma2);  
+  fprintf(f, "Delta1    = %f +/- %f\n", Delta1,             sigma_Delta1);
+  fprintf(f, "Delta2    = %f +/- %f\n", Delta2 * (Mode!=0), sigma_Delta2);
+  fprintf(f, "alpha1    = %f +/- %f\n", alpha1 * (Mode!=0), sigma_alpha1);
   fprintf(f, "chi^2/DoF = %f \n", reduced_chi_squared);
   
   /* fprintf(f, "cov(Gamma, Delta) = %.8f \n", cov); */
