@@ -35,9 +35,15 @@ plot(
   double exp_data_xrange = V_exp_max - V_exp_min ;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
+  char tmpstr[BUFSIZ]; 
   
+  /* Why is it so difficult playing with strings in C ? */
   strcpy(fit_filename, ExpDataFile);
+  strcat(fit_filename, ".Mode");
+  sprintf(tmpstr, "%d", Mode); /* contains a number */
+  strcat(fit_filename, tmpstr); 
   strcat(fit_filename, ".fit");
+
   file = fopen(fit_filename, "w");
 
   printf("Saving data for plotting (dI/dV)\n  in %s ... ", fit_filename);

@@ -1,4 +1,7 @@
-# set xrange[-22:22]
+fitfilerelpath="data/".fitfilename
+
+fitfile=root."/".fitfilerelpath
+
 set yrange[0.1:1.4]
 set grid
 
@@ -6,11 +9,11 @@ set xlabel "bias voltage (mV)"
 set ylabel "dI/dV (normalized)" 
 
 set terminal png size 2970,2100 font pngfont 40
-set output outdir."/".name.".big.png"
+set output outdir."/".name.mode.".big.png"
 plot datafile using 1:2:3 w err title name." (data)", fitfile w lines linewidth 4 title name." (fit)"
 
 set terminal png size 1024,768 font pngfont 20
-set output outdir."/".name.".png"
+set output outdir."/".name.mode.".png"
 plot datafile using 1:2:3 w err title name." (data)", fitfile w lines linewidth 2.7 title name." (fit)" 
 
 

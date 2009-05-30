@@ -12,19 +12,25 @@ print GNUPLOT "cwd=\"".dirname($0)."\"\n";
 
 while($f=readdir DATADIR) {
     if ($f =~ m/\.dat$/) {
-        $n = $f;
-        $n =~ s/(.*)\.dat$/$1/;
-        print "Jarque-Bera graph for \"$n\"... ";
-        print GNUPLOT "name=\"$n\"\n";
+        $name = $f;
+        $name =~ s/(.*)\.dat$/$1/;
+        print "Jarque-Bera graph for \"$name\"... ";
+        print GNUPLOT "name=\"$name\"\n";
         print GNUPLOT "load \"".dirname($0)."/common.gpi\"\n";
         print GNUPLOT "load \"".dirname($0)."/Jarque-Bera.gpi\"\n";
         print "done.\n";
-        
-        if (-f "$datadir/$f.fit") {
-            print "Plotting \"$n\"... ";
-            print GNUPLOT "load \"".dirname($0)."/plot.gpi\"\n";
-            print "done.\n";
-        }
+    }
+    if ($f =~ m/^(.*)(\.dat)(.*)(\.fit)$/) {
+        $name = $1;
+        $fitfilename = $f;
+        $mode = $3;
+        print "Plotting $name$mode ... ";
+        print GNUPLOT "name=\"$name\"\n";
+        print GNUPLOT "fitfilename=\"$fitfilename\"\n";
+        print GNUPLOT "mode=\"$mode\"\n";
+        print GNUPLOT "load \"".dirname($0)."/common.gpi\"\n";
+        print GNUPLOT "load \"".dirname($0)."/plot.gpi\"\n";
+        print "done.\n";
     }
 }
 

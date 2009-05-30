@@ -237,10 +237,14 @@ int write_results(
 {
   FILE * f;
   char str[BUFSIZ];
+  char tmpstr[BUFSIZ];
 
-  strcpy(str, name); 
-  strcat(str,".out");
-  
+  strcpy(str, name);
+  sprintf(tmpstr, "%d", Mode); 
+  strcat(str, ".Mode");
+  strcat(str, tmpstr);
+  strcat(str, ".out");
+
   f = fopen(str, "w");
   
   fprintf(f, "Gamma1    = %f +/- %f\n", Gamma1, sigma_Gamma1);
