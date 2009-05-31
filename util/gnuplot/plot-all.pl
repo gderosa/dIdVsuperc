@@ -4,14 +4,17 @@ use File::Basename;
 
 $GNUPLOT = 'gnuplot';
 # if you use Windows, uncomment the following, editing acccording to
-# your needs (of course, you have to install Gnuplot binaries for Win32)
+# your needs (of course, you have to install Gnuplot binaries for Win32).
+# You have to cd into this directory and issue 'perl plot-all.pl' from
+# a command prompt
+#
 # $GNUPLOT = 'C:/gnuplot/bin/pgnuplot.exe';
 
 $datadir = dirname($0)."/../../data";
 
 opendir DATADIR,$datadir or die "Couldn't open $datadir";
 
-open GNUPLOT,"|gnuplot";
+open GNUPLOT,"|$GNUPLOT";
 
 print GNUPLOT "cwd=\"".dirname($0)."\"\n";
 
