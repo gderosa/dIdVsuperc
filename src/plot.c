@@ -51,7 +51,7 @@ plot(
   /* Plot theor. function "slightly larger" than experimental points */
   V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;
   V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio; 
-  for (V=V_plot_i; V<V_plot_f; V+=0.00394859384593) /* "random"... */  
+  for (V=V_plot_i; V<V_plot_f; V+=0.00494859384593) /* "random"... */  
     {
       fprintf(
         file, 
