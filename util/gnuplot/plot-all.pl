@@ -2,6 +2,11 @@
 
 use File::Basename;
 
+$GNUPLOT = 'gnuplot';
+# if you use Windows, uncomment the following, editing acccording to
+# your needs (of course, you have to install Gnuplot binaries for Win32)
+# $GNUPLOT = 'C:/gnuplot/bin/pgnuplot.exe';
+
 $datadir = dirname($0)."/../../data";
 
 opendir DATADIR,$datadir or die "Couldn't open $datadir";
