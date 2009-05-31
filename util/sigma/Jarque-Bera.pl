@@ -2,7 +2,7 @@
 
 # Copyright 2007, "andye", http://www.perlmonks.org/?node_id=41758
 
-# Adapted from http://www.perlmonks.org/?node_id=612779 by Guido De Rosa
+# Adapted by G. De Rosa from http://www.perlmonks.org/?node_id=612779 
 
 # Takes experimental data file. Computes mean values, std deviations
 # and perform a Jarque-Bera test of gaussianity.
