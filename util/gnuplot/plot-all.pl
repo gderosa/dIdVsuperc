@@ -3,45 +3,46 @@
 use File::Basename;
 
 $GNUPLOT = 'gnuplot';
+
 # if you use Windows, uncomment the following, editing acccording to
 # your needs (of course, you have to install Gnuplot binaries for Win32).
-# You have to cd into this directory and issue 'perl plot-all.pl' from
-# a command prompt
-#
 # $GNUPLOT = 'C:/gnuplot/bin/pgnuplot.exe';
 
-$datadir = dirname($0)."/../../data";
+chdir dirname($0);
 
-opendir DATADIR,$datadir or die "Couldn't open $datadir";
+$datadir = "../../data";
+
+opendir DATADIR,$datadir or die "Couldn't open data dir!";
 
 open GNUPLOT,"|$GNUPLOT";
-
-print GNUPLOT "cwd=\"".dirname($0)."\"\n";
 
 while($f=readdir DATADIR) {
     if ($f =~ m/\.dat$/) {
         $name = $f;
         $name =~ s/(.*)\.dat$/$1/;
-        print "Jarque-Bera graph for \"$name\"... ";
+        print "Plotting Jarque-Bera graph for \"$name\"... \n";
         print GNUPLOT "name=\"$name\"\n";
-        print GNUPLOT "load \"".dirname($0)."/common.gpi\"\n";
-        print GNUPLOT "load \"".dirname($0)."/Jarque-Bera.gpi\"\n";
-        print "done.\n";
+        print GNUPLOT "load \"common.gpi\"\n";
+        print GNUPLOT "load \"Jarque-Bera.gpi\"\n";
+	#print "done.\n";
     }
     if ($f =~ m/^(.*)(\.dat)(.*)(\.fit)$/) {
         $name = $1;
         $fitfilename = $f;
         $mode = $3;
-        print "Plotting $name$mode ... ";
+	$mode =~ s/^\.//; 
+        print "Plotting best fit for \"$name\" ($mode) ... \n";
         print GNUPLOT "name=\"$name\"\n";
         print GNUPLOT "fitfilename=\"$fitfilename\"\n";
         print GNUPLOT "mode=\"$mode\"\n";
-        print GNUPLOT "load \"".dirname($0)."/common.gpi\"\n";
-        print GNUPLOT "load \"".dirname($0)."/plot.gpi\"\n";
-        print "done.\n";
+        print GNUPLOT "load \"common.gpi\"\n";
+        print GNUPLOT "load \"plot.gpi\"\n";
+	#print "done.\n";
     }
 }
 
 close GNUPLOT;
 close DATADIR;
 
+print "Done. Hit ENTER to exit.\n";
+read STDIN, $dummy, 1;

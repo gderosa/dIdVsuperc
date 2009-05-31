@@ -1,5 +1,5 @@
 
-root=cwd."/../.."
+root="../.."
 
 pngfont=root."/share/fonts/truetype/freefont/FreeSans.ttf"
 
