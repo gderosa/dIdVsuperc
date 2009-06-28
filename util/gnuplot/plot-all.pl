@@ -35,5 +35,8 @@ while($f=readdir DATADIR) {
 close GNUPLOT;
 close DATADIR;
 
-print "Done. Hit ENTER to exit.\n";
-read STDIN, $dummy, 1;
+# Uncomment the following lines if you "point and click" to this script
+# and just don't want the command window to disappear...
+#
+# print "Done. Hit ENTER to exit.\n";
+# read STDIN, $dummy, 1;
