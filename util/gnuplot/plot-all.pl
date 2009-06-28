@@ -17,15 +17,6 @@ opendir DATADIR,$datadir or die "Couldn't open data dir!";
 open GNUPLOT,"|$GNUPLOT";
 
 while($f=readdir DATADIR) {
-    if ($f =~ m/\.dat$/) {
-        $name = $f;
-        $name =~ s/(.*)\.dat$/$1/;
-        print "Plotting Jarque-Bera graph for \"$name\"... \n";
-        print GNUPLOT "name=\"$name\"\n";
-        print GNUPLOT "load \"common.gpi\"\n";
-        print GNUPLOT "load \"Jarque-Bera.gpi\"\n";
-	#print "done.\n";
-    }
     if ($f =~ m/^(.*)(\.dat)(.*)(\.fit)$/) {
         $name = $1;
         $fitfilename = $f;
