@@ -1,4 +1,4 @@
-/* init.c
+/* constraints.c 
  * 
  * Copyright (C) 2008, 2009 Guido De Rosa
  * 
@@ -18,21 +18,32 @@
  */
 
 #include "common.h"
- 
+
 int
-init(void) 
-  {
-    T0          = T0_default;
-    Gamma1_0    = Gamma1_0_default;
-    Gamma2_0    = Gamma2_0_default;    
-    Delta1_0    = Delta1_0_default;
-    Delta2_0    = Delta2_0_default;
-    alpha1_0    = alpha1_0_default;
-    k_B         = k_B_default;
-    Vi      		= Vi_default;
-    Vf		      = Vf_default;
-    strcpy(ExpDataFile, ExpDataFile_default);
-    Mode        = Mode_default;
-    
-    return 0;
-  }
+constraints
+(
+  double Gamma1,
+  double Gamma2,  
+  double Delta1,
+  double Delta2,
+  double alpha1
+)
+{
+  return (
+    Gamma1  > CONSTRAINT_GAMMA1_MIN &&
+    Gamma1  < CONSTRAINT_GAMMA1_MAX &&
+
+    Gamma2  > CONSTRAINT_GAMMA1_MIN &&
+    Gamma2  < CONSTRAINT_GAMMA1_MAX &&
+
+    Delta1  > CONSTRAINT_DELTA1_MIN &&
+    Delta1  < CONSTRAINT_DELTA1_MAX &&
+
+    Delta2  > CONSTRAINT_DELTA2_MIN &&
+    Delta2  < CONSTRAINT_DELTA2_MAX &&
+
+    alpha1  > CONSTRAINT_ALPHA1_MIN &&
+    alpha1  < CONSTRAINT_ALPHA1_MAX 
+  );     
+}
+

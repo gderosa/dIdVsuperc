@@ -34,17 +34,19 @@
 #include <gsl/gsl_multifit_nlin.h>
 
 /* Constants and defaults */
+#define   MY_HUGE_VAL               1e5             /* A finite value...! */
 #define   DATADIR                   "data"
 #define   T0_default                4.200           /* Kelvin degrees */
 #define   Gamma1_0_default          0.200
 #define   Gamma2_0_default          0.100
 #define   Delta1_0_default          1.700
 #define   Delta2_0_default          3.200
-#define   alpha1_0_default          0.667           /* alpha1+alpha2=1 */
+#define   alpha1_0_default          0.67            /* alpha1+alpha2=1 */
 #define   k_B_default               0.086           /* Boltzmann */
 #define   ExpDataFile_default       DATADIR"/MgB2_01.dat" 
-#define   Vi_default                -HUGE_VAL
-#define   Vf_default                HUGE_VAL
+#define   Vi_default                -MY_HUGE_VAL
+#define   Vf_default                MY_HUGE_VAL
+#define   Mode_default              1               /* two Deltas, one Gamma */
 
 #define   MaxExpPoints              4096
 
@@ -62,27 +64,26 @@
 #define   DSTEPSIZE                 2e-7  
 
 /* (chi squared) minimization algorithms                                      */
-#define   MAX_SIMPLEX_ITER          400   /* Nelder-Mead "Simplex"            */
+#define   MAX_SIMPLEX_ITER          500   /* Nelder-Mead "Simplex"            */
 #define   MAX_FIT_ITER              100   /* Levenberg-Marquardt "downhill"   */
 #define   MULTIMIN_TEST_SIZE        2e-5  /* Nelder-Mead "Simplex"            */
 #define   MULTIFIT_TEST_DELTA       1e-7  /* Levenberg-Marquardt "downhill"   */
 
 /* Constraints on parameters */
 #define   CONSTRAINT_GAMMA1_MIN     0.000
-#define   CONSTRAINT_GAMMA1_MAX     HUGE_VAL
+#define   CONSTRAINT_GAMMA1_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_GAMMA2_MIN     0.000
-#define   CONSTRAINT_GAMMA2_MAX     HUGE_VAL
+#define   CONSTRAINT_GAMMA2_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_DELTA1_MIN     0.000
-#define   CONSTRAINT_DELTA1_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA1_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_DELTA2_MIN     0.000
-#define   CONSTRAINT_DELTA2_MAX     HUGE_VAL
+#define   CONSTRAINT_DELTA2_MAX     MY_HUGE_VAL
 
 #define   CONSTRAINT_ALPHA1_MIN     0.666
-#define   CONSTRAINT_ALPHA1_MAX     1.000    
-
+#define   CONSTRAINT_ALPHA1_MAX     1.0001    
 
 /* Types */
 
@@ -129,7 +130,7 @@ extern double
   k_B, 
   Vi, Vf;
 extern char ExpDataFile[BUFSIZ];
-
+int Mode; /* 0=single gap, 1=double Delta, 2=double Delta and Gamma */
 #endif
 
 /* Functions */
@@ -315,3 +316,11 @@ constraints
   double Delta2,
   double alpha1
 );
+
+const char *
+BOOL2yn(BOOL b);
+
+BOOL
+yn2BOOL(char * str, BOOL _default_);
+
+

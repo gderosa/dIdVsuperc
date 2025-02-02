@@ -31,7 +31,7 @@ cpow_2(const gsl_complex z)
 
 double array_min(double *ary, size_t n) 
 {
-  double min = HUGE_VAL;
+  double min = MY_HUGE_VAL;
   size_t i;
 
   for (i=0;i<n;i++)
@@ -45,7 +45,7 @@ double array_min(double *ary, size_t n)
 
 double array_max(double *ary, size_t n) 
 {
-  double max = -HUGE_VAL;
+  double max = -MY_HUGE_VAL;
   size_t i;
 
   for (i=0;i<n;i++)
@@ -59,21 +59,22 @@ double array_max(double *ary, size_t n)
 
 /* User Interface */
 
-/* DISABLED...
-const char * 
-BOOL2yn(BOOL b) 
+const char *
+BOOL2yn(BOOL b)
 {
-  if (b) 
+  if (b)
     return "Y/n";
   else
     return "y/N";
 }
 
 BOOL
-yn2BOOL(char * str)
+yn2BOOL(char * str, BOOL _default_)
 {
-  if (str[0] == 'y' || str[0] == 'y')
+  if (str[0] == 'Y' || str[0] == 'y')
     return 1;
-  return 0;
+  if (str[0] == 'N' || str[0] == 'n')
+    return 0;
+  return _default_;
 }
-*/
+

@@ -1,31 +1,12 @@
-#!/usr/bin/gnuplot
-
-#name="MgB2_01"
-
-root=cwd."/../.."
-
-pngfont=root."/share/fonts/truetype/freefont/FreeSans.ttf"
-
-datafilename=name.".dat"
-fitfilename=name.".dat.fit"
-
-datafilerelpath="data/".datafilename
 fitfilerelpath="data/".fitfilename
 
-datafile=root."/".datafilerelpath
 fitfile=root."/".fitfilerelpath
 
-outdir=root."/plots"
-
-
-# set xrange[-22:22]
 set yrange[0.1:1.4]
-
 set grid
 
 set xlabel "bias voltage (mV)"
 set ylabel "dI/dV (normalized)" 
-
 
 set terminal png size 2970,2100 font pngfont 40
 set output outdir."/".name.".big.png"

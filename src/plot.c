@@ -35,18 +35,35 @@ plot(
   double exp_data_xrange = V_exp_max - V_exp_min ;
   FILE * file;
   char fit_filename[BUFSIZ]; /* fit function datafile for plotting */
+  char tmpstr[BUFSIZ]; 
+  unsigned int i;
   
+  /* Why is it so difficult playing with strings in C ? */
   strcpy(fit_filename, ExpDataFile);
+  strcat(fit_filename, ".Mode");
+  sprintf(tmpstr, "%d", Mode); /* contains a number */
+  strcat(fit_filename, tmpstr); 
   strcat(fit_filename, ".fit");
+
   file = fopen(fit_filename, "w");
 
   printf("Saving data for plotting (dI/dV)\n  in %s ... ", fit_filename);
 
   /* Plot theor. function "slightly larger" than experimental points */
   V_plot_i = V_exp_min - exp_data_xrange*ExtraPlotRatio;
-  V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio; 
-  for (V=V_plot_i; V<V_plot_f; V+=0.0153454) /* "random" step... */  
+  V_plot_f = V_exp_max + exp_data_xrange*ExtraPlotRatio;
+  for (V=V_plot_i; V < d->X[0]; V+=0.05)
     {
+      fprintf(
+        file,
+        "%.8f \t %.8f \n",
+        V,
+        Gin_doubleDeltaGamma(V, Gamma1, Gamma2, Delta1, Delta2, alpha1, T0)
+      );
+    }
+  for (i = 0; i < d->n; i++) /* plot exactly AT the experimental points */
+    {
+      V = d->X[i];
       fprintf(
         file, 
         "%.8f \t %.8f \n", 
@@ -54,6 +71,15 @@ plot(
         Gin_doubleDeltaGamma(V, Gamma1, Gamma2, Delta1, Delta2, alpha1, T0)
       );       
     }  
+  for (V = d->X[d->n - 1]; V < V_plot_f; V+=0.05)
+    {
+      fprintf(
+        file,
+        "%.8f \t %.8f \n",
+        V,
+        Gin_doubleDeltaGamma(V, Gamma1, Gamma2, Delta1, Delta2, alpha1, T0)
+      );
+    }
 
   fclose(file);
   

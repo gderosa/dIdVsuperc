@@ -24,6 +24,6 @@
 double Gamma1_0, Gamma2_0, Delta1_0, Delta2_0, alpha1_0, T0, k_B, Vi, Vf;
 char ExpDataFile[BUFSIZ];
 short int PlotSquareResiduals;
-
+int Mode; /* 0=single gap, 1=double Delta, 2=double Delta and Gamma */
 #undef GLOBALS
 
