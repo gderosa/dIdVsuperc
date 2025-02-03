@@ -1,3 +1,21 @@
+**PLEASE NOTE**, this is code from 2009! It was based on GSL v1, and it is incompatile with current v2.
+
+Making it compile today would require either
+
+1. some extra work to adapt the C code or
+2. a mechanism (either documentation or automation within CMake?)
+so that libGSL v1 is downloaded and compiled (you will hardly find precomipled packages you can just `apt install`!),
+then statically linked it into the resulting executable
+
+For now this is just an historical archive.
+
+It includes results/output produced at the time (mostly plot images and some intermediate result files).
+
+Original README follows.
+
+---
+---
+
 dIdVsuperc-doubleGap 
 Copyright 2008, 2009 Guido De Rosa (guidoderosa at gmail.com)
 
