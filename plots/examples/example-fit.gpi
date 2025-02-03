@@ -1,0 +1,38 @@
+#!/usr/bin/gnuplot
+
+name="MgB2_01"
+
+pngfont="/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+
+
+datadir="../../data"
+dataext=".dat"
+fitext=".fit"
+datafile=datadir."/".name.dataext
+fitfile=datafile.fitext
+
+# set xrange[-22:22]
+set yrange[0.1:1.4]
+
+set grid
+
+set xlabel "bias voltage (mV)"
+set ylabel "dI/dV (normalized)" 
+
+
+set terminal png size 2970,2100 font pngfont 40
+set output name.".big.png"
+plot datafile w err title datafile, fitfile w lines linewidth 4 title fitfile
+
+set terminal postscript size 29.7cm,21.0cm color solid landscape font 16
+set output name.".ps"
+plot datafile linewidth 0.4 w err title datafile, fitfile w lines linewidth 3 title fitfile
+
+set terminal postscript size 29.7cm,21.0cm color solid eps font 32
+set output name.".eps"
+plot datafile linewidth 0.4 w err title datafile, fitfile w lines linewidth 3 title fitfile
+
+
+
+
+
